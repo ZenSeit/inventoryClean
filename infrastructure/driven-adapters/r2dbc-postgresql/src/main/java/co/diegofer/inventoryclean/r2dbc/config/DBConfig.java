@@ -1,4 +1,4 @@
-package co.diegofer.inventoryclean.config;
+package co.diegofer.inventoryclean.r2dbc.config;
 
 import io.r2dbc.spi.ConnectionFactories;
 import io.r2dbc.spi.ConnectionFactory;

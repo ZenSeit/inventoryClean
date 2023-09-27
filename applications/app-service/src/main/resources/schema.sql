@@ -4,8 +4,7 @@ USE inventory;
 CREATE TABLE IF NOT EXISTS Branch (
     id VARCHAR(50) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    city VARCHAR(100) NOT NULL,
-    country VARCHAR(100) NOT NULL
+    location VARCHAR(255) NOT NULL
     );
 
 -- Create the User (Employee) table with a foreign key to Branch
