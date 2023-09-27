@@ -5,6 +5,7 @@ import co.diegofer.inventoryclean.model.product.Product;
 import co.diegofer.inventoryclean.model.user.User;
 import co.diegofer.inventoryclean.usecase.addstocktoproduct.AddStockToProductUseCase;
 import co.diegofer.inventoryclean.usecase.getproductsbybranchid.GetProductsByBranchIdUseCase;
+import co.diegofer.inventoryclean.usecase.reducestockproduct.ReduceStockProductUseCase;
 import co.diegofer.inventoryclean.usecase.registerbranch.RegisterBranchUseCase;
 import co.diegofer.inventoryclean.usecase.registerproduct.RegisterProductUseCase;
 import co.diegofer.inventoryclean.usecase.registeruser.RegisterUserUseCase;
@@ -70,6 +71,17 @@ public class RouterRest {
     public RouterFunction<ServerResponse> patchAddProductStock(AddStockToProductUseCase addStockToProductUseCase) {
         return route(PATCH("/products/id/{id}/stock/{stock}/add"),
                 request -> addStockToProductUseCase.apply(request.pathVariable("id"), Integer.valueOf(request.pathVariable("stock")))
+                        .flatMap(item -> ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue(item))
+                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(throwable.getMessage()))
+        );
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> patchReduceProductStock(ReduceStockProductUseCase reduceStockProductUseCase) {
+        return route(PATCH("/products/id/{id}/stock/{stock}/reduce"),
+                request -> reduceStockProductUseCase.apply(request.pathVariable("id"), Integer.valueOf(request.pathVariable("stock")))
                         .flatMap(item -> ServerResponse.ok()
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .bodyValue(item))

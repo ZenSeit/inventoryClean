@@ -51,15 +51,24 @@ public class ProductRepositoryAdapter implements ProductRepository {
     public Mono<Product> addStock(String productId, Integer quantity) {
         return productRepository.findById(productId)
                 .switchIfEmpty(Mono.error(new IllegalArgumentException("Product with id: " + productId + " was not found")))
-                .flatMap(product ->{
-                    //product.setInventoryStock(product.getInventoryStock() + quantity);
-                        return productRepository.save(product);
-                }
-                ).map(product -> mapper.map(product, Product.class));
+                .flatMap(product -> {
+                    product.setInventoryStock(product.getInventoryStock() + quantity);
+                    return productRepository.save(product);
+                }).map(product -> mapper.map(product, Product.class));
+
     }
 
     @Override
     public Mono<Product> reduceStock(String productId, Integer quantity) {
-        return null;
+        return productRepository
+                .findById(productId)
+                .switchIfEmpty(Mono.empty())
+                .flatMap(product ->{
+                    if(product.getInventoryStock()>=quantity){
+                        product.setInventoryStock(product.getInventoryStock()-quantity);
+                        return productRepository.save(product);
+                    }
+                    return Mono.error(new Throwable("There is no enough stock"));
+                }).map(item -> mapper.map(item, Product.class));
     }
 }
