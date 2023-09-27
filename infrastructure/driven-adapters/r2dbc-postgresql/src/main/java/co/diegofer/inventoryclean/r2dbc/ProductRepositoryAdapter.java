@@ -20,6 +20,8 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     private final DatabaseClient dbClient;
 
+    private final ProductRepositoryR2dbc productRepository;
+
     @Override
     public Mono<Product> saveAProduct(Product product) {
         String newId = UUID.randomUUID().toString();
@@ -40,12 +42,20 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     @Override
     public Flux<Product> findProductsByBranch(String branchId) {
-        return null;
+        return productRepository.findByBranchId(branchId)
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("Branch not found")))
+                .map(product -> mapper.map(product, Product.class));
     }
 
     @Override
     public Mono<Product> addStock(String productId, Integer quantity) {
-        return null;
+        return productRepository.findById(productId)
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("Product with id: " + productId + " was not found")))
+                .flatMap(product ->{
+                    //product.setInventoryStock(product.getInventoryStock() + quantity);
+                        return productRepository.save(product);
+                }
+                ).map(product -> mapper.map(product, Product.class));
     }
 
     @Override
