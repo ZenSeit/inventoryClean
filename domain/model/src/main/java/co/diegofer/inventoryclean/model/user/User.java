@@ -1,14 +1,21 @@
 package co.diegofer.inventoryclean.model.user;
-import lombok.Builder;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 //import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 @Getter
 @Setter
-//@NoArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class User {
+
+    private String id;
+    private String name;
+    private String lastName;
+    private String email;
+    private String password;
+    private String role;
+    private String branchId;
+
 }

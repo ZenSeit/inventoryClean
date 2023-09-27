@@ -2,6 +2,7 @@ package co.diegofer.inventoryclean.r2dbc;
 
 import co.diegofer.inventoryclean.model.product.Product;
 import co.diegofer.inventoryclean.model.product.gateways.ProductRepository;
+import co.diegofer.inventoryclean.r2dbc.data.ProductData;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.r2dbc.core.DatabaseClient;
@@ -22,13 +23,14 @@ public class ProductRepositoryAdapter implements ProductRepository {
     @Override
     public Mono<Product> saveAProduct(Product product) {
         String newId = UUID.randomUUID().toString();
+        ProductData productData = mapper.map(product, ProductData.class);
         dbClient.sql("INSERT INTO Product(id, name, description, inventory_stock, category, branch_id) VALUES(:id, :name, :description, :inventoryStock, :category, :branchId)")
                 .bind("id", newId)
-                .bind("name", product.getName())
-                .bind("description", product.getDescription())
-                .bind("inventoryStock", product.getInventoryStock())
-                .bind("category", product.getCategory())
-                .bind("branchId", product.getBranchId())
+                .bind("name", productData.getName())
+                .bind("description", productData.getDescription())
+                .bind("inventoryStock", productData.getInventoryStock())
+                .bind("category", productData.getCategory())
+                .bind("branchId", productData.getBranchId())
                 .fetch()
                 .one()
                 .subscribe();
