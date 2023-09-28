@@ -14,4 +14,8 @@ public class Branch {
     private String name;
     private String location;
 
+    public Branch(String name, String location) {
+        this.name = name;
+        this.location = location;
+    }
 }

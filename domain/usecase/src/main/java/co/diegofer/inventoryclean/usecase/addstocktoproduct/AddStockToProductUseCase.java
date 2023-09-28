@@ -1,6 +1,5 @@
 package co.diegofer.inventoryclean.usecase.addstocktoproduct;
 
-import co.diegofer.inventoryclean.model.branch.gateways.BranchRepository;
 import co.diegofer.inventoryclean.model.product.Product;
 import co.diegofer.inventoryclean.model.product.gateways.ProductRepository;
 import lombok.RequiredArgsConstructor;

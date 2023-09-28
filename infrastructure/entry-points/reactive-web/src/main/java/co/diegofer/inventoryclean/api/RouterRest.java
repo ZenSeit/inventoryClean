@@ -1,6 +1,7 @@
 package co.diegofer.inventoryclean.api;
 
 import co.diegofer.inventoryclean.model.branch.Branch;
+import co.diegofer.inventoryclean.model.commands.RegisterBranchCommand;
 import co.diegofer.inventoryclean.model.product.Product;
 import co.diegofer.inventoryclean.model.user.User;
 import co.diegofer.inventoryclean.usecase.addstocktoproduct.AddStockToProductUseCase;
@@ -16,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -24,15 +26,11 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class RouterRest {
 
     @Bean
-    public RouterFunction<ServerResponse> saveBranch(RegisterBranchUseCase registerBranchUseCase){
+    public RouterFunction<ServerResponse> saveBranch(Handler handler){
         return route(POST("/branches").and(accept(MediaType.APPLICATION_JSON)),
-                request -> request.bodyToMono(Branch.class)
-                        .flatMap(branch -> registerBranchUseCase.apply(branch)
-                                .flatMap(result -> ServerResponse.status(201)
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .bodyValue(result))
-                                .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_ACCEPTABLE).bodyValue(throwable.getMessage()))));
+                handler::listenPOSTRegisterBranchUseCase);
     }
+
 
     @Bean
     public RouterFunction<ServerResponse> saveProduct(RegisterProductUseCase registerProductUseCase){
