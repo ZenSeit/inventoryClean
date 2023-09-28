@@ -1,4 +1,4 @@
-package co.diegofer.inventoryclean.model.values.branch;
+package co.diegofer.inventoryclean.model.values.common;
 
 import co.diegofer.inventoryclean.model.generic.ValueObject;
 

@@ -7,7 +7,7 @@ import co.diegofer.inventoryclean.model.commands.RegisterBranchCommand;
 import co.diegofer.inventoryclean.model.generic.DomainEvent;
 import co.diegofer.inventoryclean.model.values.branch.BranchId;
 import co.diegofer.inventoryclean.model.values.branch.Location;
-import co.diegofer.inventoryclean.model.values.branch.Name;
+import co.diegofer.inventoryclean.model.values.common.Name;
 import co.diegofer.inventoryclean.usecase.generics.DomainEventRepository;
 import co.diegofer.inventoryclean.usecase.generics.UserCaseForCommand;
 import reactor.core.publisher.Flux;

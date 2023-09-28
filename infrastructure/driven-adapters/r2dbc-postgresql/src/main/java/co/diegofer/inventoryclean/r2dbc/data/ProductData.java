@@ -18,6 +18,7 @@ public class ProductData {
     private String name;
     private String description;
     private int inventoryStock;
+    private float price;
     private String category;
     private String branchId;
 }

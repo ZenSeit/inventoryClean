@@ -26,11 +26,12 @@ public class ProductRepositoryAdapter implements ProductRepository {
     public Mono<Product> saveAProduct(Product product) {
         String newId = UUID.randomUUID().toString();
         ProductData productData = mapper.map(product, ProductData.class);
-        dbClient.sql("INSERT INTO Product(id, name, description, inventory_stock, category, branch_id) VALUES(:id, :name, :description, :inventoryStock, :category, :branchId)")
+        dbClient.sql("INSERT INTO Product(id, name, description, inventory_stock, price, category, branch_id) VALUES(:id, :name, :description, :inventoryStock, :price, :category, :branchId)")
                 .bind("id", newId)
                 .bind("name", productData.getName())
                 .bind("description", productData.getDescription())
                 .bind("inventoryStock", productData.getInventoryStock())
+                .bind("price", productData.getPrice())
                 .bind("category", productData.getCategory())
                 .bind("branchId", productData.getBranchId())
                 .fetch()

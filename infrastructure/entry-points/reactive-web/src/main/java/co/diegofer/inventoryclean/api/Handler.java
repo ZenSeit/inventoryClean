@@ -1,8 +1,10 @@
 package co.diegofer.inventoryclean.api;
 
+import co.diegofer.inventoryclean.model.commands.AddProductCommand;
 import co.diegofer.inventoryclean.model.commands.RegisterBranchCommand;
 import co.diegofer.inventoryclean.model.generic.DomainEvent;
 import co.diegofer.inventoryclean.usecase.registerbranch.RegisterBranchUseCase;
+import co.diegofer.inventoryclean.usecase.registerproduct.RegisterProductUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -17,12 +19,23 @@ public class Handler {
 
     private final RegisterBranchUseCase registerBranchUseCase;
 
+    private final RegisterProductUseCase registerProductUseCase;
+
     public Mono<ServerResponse> listenPOSTRegisterBranchUseCase(ServerRequest serverRequest) {
 
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromPublisher(registerBranchUseCase
                                 .apply(serverRequest.bodyToMono(RegisterBranchCommand.class)),
+                        DomainEvent.class)).onErrorResume(throwable -> ServerResponse.badRequest().bodyValue(throwable.getMessage()));
+    }
+
+    public Mono<ServerResponse> listenPOSTAddProduct(ServerRequest serverRequest) {
+
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromPublisher(registerProductUseCase
+                                .apply(serverRequest.bodyToMono(AddProductCommand.class)),
                         DomainEvent.class)).onErrorResume(throwable -> ServerResponse.badRequest().bodyValue(throwable.getMessage()));
     }
 

@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS Product (
     name VARCHAR(100) NOT NULL,
     description VARCHAR(255),
     inventory_stock INT NOT NULL,
+    price FLOAT NOT NULL,
     category VARCHAR(100) NOT NULL,
     branch_id VARCHAR(50),
     FOREIGN KEY (branch_id) REFERENCES Branch(id) ON DELETE CASCADE
