@@ -28,7 +28,10 @@ public class UserRepositoryAdapter implements UserRepository {
         userData.setId(newId);
 
         return userRepositoryR2dbc.saveUser(userData.getId(),userData.getName(),userData.getLastName(),
-                userData.getPassword(),userData.getEmail(),userData.getRole(),userData.getBranchId()).map(data -> mapper.map(data, User.class));
+                userData.getPassword(),userData.getEmail(),userData.getRole(),userData.getBranchId()).thenReturn(
+                            mapper.map(userData, User.class)
+                        );
+
 
     }
 }

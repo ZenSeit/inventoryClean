@@ -18,6 +18,9 @@ import co.diegofer.inventoryclean.usecase.generics.UserCaseForCommand;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class RegisterUserUseCase extends UserCaseForCommand<RegisterUserCommand> {
 
@@ -36,39 +39,47 @@ public class RegisterUserUseCase extends UserCaseForCommand<RegisterUserCommand>
     public Flux<DomainEvent> apply(Mono<RegisterUserCommand> registerUserCommandMono) {
         return registerUserCommandMono.flatMapMany(command -> repository.findById(command.getBranchId())
                 .collectList()
-                .flatMapIterable(events -> {
+                .flatMapMany(events -> {
 
-                        Name name = new Name(command.getName());
-                        LastName lastName = new LastName(command.getLastName());
-                        Email email = new Email(command.getEmail());
-                        Password password = new Password(command.getPassword());
-                        Role role = new Role(command.getRole());
+                    Name name = new Name(command.getName());
+                    LastName lastName = new LastName(command.getLastName());
+                    Email email = new Email(command.getEmail());
+                    Password password = new Password(command.getPassword());
+                    Role role = new Role(command.getRole());
 
 
-                        Mono<User> userSaved = userRepository.saveAUser(new User(
-                                        name.value(),
-                                        lastName.value(),
-                                        email.value(),
-                                        password.value(),
-                                        role.value(),
-                                        command.getBranchId()));
+                    return userRepository.saveAUser(new User(
+                            name.value(),
+                            lastName.value(),
+                            email.value(),
+                            password.value(),
+                            role.value(),
+                            command.getBranchId()))
+                            .flatMapMany(
 
-                                    BranchAggregate branch = BranchAggregate.from(BranchId.of(command.getBranchId()),events);
-                                    branch.addUser(
-                                            UserId.of(userSaved.subscribe(user -> user.getId()).toString()),
-                                            new Name(userSaved.subscribe(user -> user.getName()).toString()),
-                                            new LastName(userSaved.subscribe(user -> user.getLastName()).toString()),
-                                            new Email(userSaved.subscribe(user -> user.getEmail()).toString()),
-                                            new Password(userSaved.subscribe(user -> user.getPassword()).toString()),
-                                            new Role(userSaved.subscribe(user -> user.getRole()).toString())
-                                    );
+                                    savedUser ->{
+                                        System.out.println("savedUser: "+savedUser.getName());
+                                        BranchAggregate branch = BranchAggregate.from(BranchId.of(command.getBranchId()), events);
+                                        branch.addUser(
+                                                UserId.of(savedUser.getId()),
+                                                new Name(savedUser.getName()),
+                                                new LastName(savedUser.getLastName()),
+                                                new Email(savedUser.getEmail()),
+                                                new Password(savedUser.getPassword()),
+                                                new Role(savedUser.getRole())
+                                        );
 
-                                    return branch.getUncommittedChanges();
+                                        return Flux.fromIterable(branch.getUncommittedChanges());
+                                    }
+                            );
 
-                }).map(event -> {
+
+                })
+                .map(event -> {
                     repository.saveEvent(event);
                     return event;
                 }).flatMap(repository::saveEvent)
         );
     }
+
 }
