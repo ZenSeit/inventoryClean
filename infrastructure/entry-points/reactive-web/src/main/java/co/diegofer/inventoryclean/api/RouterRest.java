@@ -39,14 +39,9 @@ public class RouterRest {
     }
 
     @Bean
-    public RouterFunction<ServerResponse> saveUser(RegisterUserUseCase registerUserUseCase){
-        return route(POST("/users").and(accept(MediaType.APPLICATION_JSON)),
-                request -> request.bodyToMono(User.class)
-                        .flatMap(product -> registerUserUseCase.apply(product)
-                                .flatMap(result -> ServerResponse.status(201)
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .bodyValue(result))
-                                .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_ACCEPTABLE).bodyValue(throwable.getMessage()))));
+    public RouterFunction<ServerResponse> saveUser(Handler handler){
+        return route(POST("/user").and(accept(MediaType.APPLICATION_JSON)),
+                handler::listenPOSTRegisterUser);
     }
 
     @Bean

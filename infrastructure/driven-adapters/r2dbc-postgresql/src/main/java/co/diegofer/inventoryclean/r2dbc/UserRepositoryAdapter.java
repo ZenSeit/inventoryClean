@@ -18,22 +18,17 @@ public class UserRepositoryAdapter implements UserRepository {
     private final ObjectMapper mapper;
 
     private final DatabaseClient dbClient;
+
+    private final UserRepositoryR2dbc userRepositoryR2dbc;
+
     @Override
     public Mono<User> saveAUser(User user) {
         String newId = UUID.randomUUID().toString();
         UserData userData = mapper.map(user, UserData.class);
-        dbClient.sql("INSERT INTO User(id, name, lastname, password, email, role, branch_id) VALUES(:id, :name, :lastname, :password, :email, :role, :branchId)")
-                .bind("id", newId)
-                .bind("name", userData.getName())
-                .bind("lastname", userData.getLastName())
-                .bind("password", userData.getPassword())
-                .bind("email", userData.getEmail())
-                .bind("role", userData.getRole())
-                .bind("branchId", userData.getBranchId())
-                .fetch()
-                .one()
-                .subscribe();
-        user.setId(newId);
-        return Mono.just(user);
+        userData.setId(newId);
+
+        return userRepositoryR2dbc.saveUser(userData.getId(),userData.getName(),userData.getLastName(),
+                userData.getPassword(),userData.getEmail(),userData.getRole(),userData.getBranchId()).map(data -> mapper.map(data, User.class));
+
     }
 }
