@@ -73,7 +73,6 @@ public class RegisterUserUseCase extends UserCaseForCommand<RegisterUserCommand>
                                     }
                             );
 
-
                 })
                 .map(event -> {
                     repository.saveEvent(event);

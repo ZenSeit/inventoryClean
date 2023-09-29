@@ -5,6 +5,7 @@ import co.diegofer.inventoryclean.model.product.gateways.ProductRepository;
 import co.diegofer.inventoryclean.r2dbc.data.ProductData;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.utils.ObjectMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
@@ -26,19 +27,12 @@ public class ProductRepositoryAdapter implements ProductRepository {
     public Mono<Product> saveAProduct(Product product) {
         String newId = UUID.randomUUID().toString();
         ProductData productData = mapper.map(product, ProductData.class);
-        dbClient.sql("INSERT INTO Product(id, name, description, inventory_stock, price, category, branch_id) VALUES(:id, :name, :description, :inventoryStock, :price, :category, :branchId)")
-                .bind("id", newId)
-                .bind("name", productData.getName())
-                .bind("description", productData.getDescription())
-                .bind("inventoryStock", productData.getInventoryStock())
-                .bind("price", productData.getPrice())
-                .bind("category", productData.getCategory())
-                .bind("branchId", productData.getBranchId())
-                .fetch()
-                .one()
-                .subscribe();
-        product.setId(newId);
-        return Mono.just(product);
+        productData.setId(newId);
+
+        return productRepository.saveProduct(productData.getId(),productData.getName(),productData.getDescription(),
+                productData.getInventoryStock(),productData.getPrice(),productData.getCategory(),productData.getBranchId()).thenReturn(
+                mapper.map(productData, Product.class))
+                .onErrorMap(DataIntegrityViolationException.class,e -> new DataIntegrityViolationException("Error creating product: "+e.getMessage()));
     }
 
     @Override

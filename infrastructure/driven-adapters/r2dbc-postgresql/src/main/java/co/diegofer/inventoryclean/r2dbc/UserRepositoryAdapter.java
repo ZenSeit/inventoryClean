@@ -5,6 +5,7 @@ import co.diegofer.inventoryclean.model.user.gateways.UserRepository;
 import co.diegofer.inventoryclean.r2dbc.data.UserData;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.utils.ObjectMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
@@ -29,9 +30,8 @@ public class UserRepositoryAdapter implements UserRepository {
 
         return userRepositoryR2dbc.saveUser(userData.getId(),userData.getName(),userData.getLastName(),
                 userData.getPassword(),userData.getEmail(),userData.getRole(),userData.getBranchId()).thenReturn(
-                            mapper.map(userData, User.class)
-                        );
-
+                mapper.map(userData, User.class)
+        ).onErrorMap(DataIntegrityViolationException.class, e -> new DataIntegrityViolationException("Error creating user: "+e.getMessage()));
 
     }
 }
