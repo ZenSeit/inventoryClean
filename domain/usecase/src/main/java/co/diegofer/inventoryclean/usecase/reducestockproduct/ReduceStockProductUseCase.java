@@ -12,7 +12,7 @@ public class ReduceStockProductUseCase {
     private final ProductRepository productRepository;
 
     public Mono<Product> apply(String branchId, Integer quantity) {
-        return productRepository.reduceStock(branchId, quantity);
+        return null;
     }
 
 }

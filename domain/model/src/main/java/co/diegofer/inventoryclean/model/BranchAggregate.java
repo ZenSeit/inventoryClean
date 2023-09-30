@@ -1,6 +1,8 @@
 package co.diegofer.inventoryclean.model;
 
+import co.diegofer.inventoryclean.model.commands.RegisterFinalCustomerSaleCommand.ProductSale;
 import co.diegofer.inventoryclean.model.events.BranchCreated;
+import co.diegofer.inventoryclean.model.events.FinalCustomerSaleRegistered;
 import co.diegofer.inventoryclean.model.events.ProductAdded;
 import co.diegofer.inventoryclean.model.events.UserAdded;
 import co.diegofer.inventoryclean.model.generic.AggregateRoot;
@@ -12,6 +14,7 @@ import co.diegofer.inventoryclean.model.values.product.*;
 import co.diegofer.inventoryclean.model.values.user.*;
 
 import java.util.List;
+import java.util.Objects;
 
 public class BranchAggregate extends AggregateRoot<BranchId> {
 
@@ -43,6 +46,22 @@ public class BranchAggregate extends AggregateRoot<BranchId> {
 
     public void addUser(UserId userId, Name name, LastName lastName, Email email, Password password, Role role) {
         appendChange(new UserAdded(userId.value(), name.value(), lastName.value(), email.value(), password.value(), role.value())).apply();
+    }
+
+    public void registerFinalCustomerSale(List<ProductSale> products, int total){
+        appendChange(new FinalCustomerSaleRegistered(products, total));
+    }
+
+    public int calculateTotal(List<ProductSale> products){
+        int total = 0;
+        for (ProductSale productRequested: products) {
+            for (ProductEntity productInBranch: this.products) {
+                if (Objects.equals(productRequested.getId(), productInBranch.identity().value())){
+                    total += productInBranch.price().value()*productRequested.getQuantity();
+                }
+            }
+        }
+        return total;
     }
 
 

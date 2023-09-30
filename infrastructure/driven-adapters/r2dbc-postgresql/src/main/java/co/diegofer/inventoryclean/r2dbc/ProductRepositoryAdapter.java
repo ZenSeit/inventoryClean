@@ -1,5 +1,6 @@
 package co.diegofer.inventoryclean.r2dbc;
 
+import co.diegofer.inventoryclean.model.commands.RegisterFinalCustomerSaleCommand.ProductSale;
 import co.diegofer.inventoryclean.model.product.Product;
 import co.diegofer.inventoryclean.model.product.gateways.ProductRepository;
 import co.diegofer.inventoryclean.r2dbc.data.ProductData;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -54,16 +57,22 @@ public class ProductRepositoryAdapter implements ProductRepository {
     }
 
     @Override
-    public Mono<Product> reduceStock(String productId, Integer quantity) {
-        return productRepository
-                .findById(productId)
-                .switchIfEmpty(Mono.empty())
-                .flatMap(product ->{
-                    if(product.getInventoryStock()>=quantity){
-                        product.setInventoryStock(product.getInventoryStock()-quantity);
-                        return productRepository.save(product);
-                    }
-                    return Mono.error(new Throwable("There is no enough stock"));
-                }).map(item -> mapper.map(item, Product.class));
+    public Mono<List<ProductSale>> reduceStock(List<ProductSale> productsRequested) {
+        List<ProductSale> productsStockReducedList = new ArrayList<>();
+
+        for(ProductSale productRequested: productsRequested) {
+            productRepository
+                    .findById(productRequested.getId())
+                    .switchIfEmpty(Mono.error(new Throwable("There is no enough stock")))
+                    .flatMap(product -> {
+                        if (product.getInventoryStock() >= productRequested.getQuantity()) {
+                            product.setInventoryStock(product.getInventoryStock() - productRequested.getQuantity());
+                            productsStockReducedList.add(productRequested);
+                            return productRepository.save(product);
+                        } else return Mono.error(new Throwable("There is no enough stock"));
+                    }).subscribe();
+
+        }
+        return Mono.just(productsStockReducedList);
     }
 }
