@@ -11,11 +11,11 @@ public class FinalCustomerSaleRegistered extends DomainEvent {
     int total;
 
     public FinalCustomerSaleRegistered() {
-        super("co.diegofer.inventoryclean.model.events.ProductAdded");
+        super("co.diegofer.inventoryclean.model.events.FinalCustomerSaleRegistered");
     }
 
     public FinalCustomerSaleRegistered(List<ProductSale> products, int total) {
-        super("co.diegofer.inventoryclean.model.events.ProductAdded");
+        super("co.diegofer.inventoryclean.model.events.FinalCustomerSaleRegistered");
         this.products = products;
         this.total = total;
     }

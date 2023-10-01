@@ -1,8 +1,7 @@
 package co.diegofer.inventoryclean.model;
 
-import co.diegofer.inventoryclean.model.events.BranchCreated;
-import co.diegofer.inventoryclean.model.events.ProductAdded;
-import co.diegofer.inventoryclean.model.events.UserAdded;
+import co.diegofer.inventoryclean.model.commands.RegisterFinalCustomerSaleCommand.ProductSale;
+import co.diegofer.inventoryclean.model.events.*;
 import co.diegofer.inventoryclean.model.generic.EventChange;
 import co.diegofer.inventoryclean.model.values.branch.Location;
 import co.diegofer.inventoryclean.model.values.common.Name;
@@ -13,6 +12,7 @@ import co.diegofer.inventoryclean.model.values.user.Role;
 import co.diegofer.inventoryclean.model.values.user.UserId;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class BranchChange extends EventChange {
 
@@ -45,6 +45,29 @@ public class BranchChange extends EventChange {
                     new Role(event.getRole())
             ));
         });
+
+        apply((StockAdded event) -> {
+            for (ProductEntity product: branchAggregate.products) {
+                if (product.identity().value().equals(event.getProductId())){
+                    product.addStock(new InventoryStock(event.getQuantityToAdd()));
+                }
+            }
+        });
+
+        apply((FinalCustomerSaleRegistered event) -> {
+            for (ProductSale productRequested: event.getProducts()) {
+                for (ProductEntity productInBranch: branchAggregate.products) {
+                    if (Objects.equals(productRequested.getId(), productInBranch.identity().value())){
+                        productInBranch.setInventoryStock(
+                                new InventoryStock(
+                                        productInBranch.inventoryStock().value() - productRequested.getQuantity()
+                                ));
+                    }
+                }
+            }
+        });
+
+
 
     }
 

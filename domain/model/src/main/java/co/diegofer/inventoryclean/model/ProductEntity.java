@@ -40,4 +40,12 @@ public class ProductEntity extends Entity<ProductId> {
     public Price price() {
         return price;
     }
+
+    public void setInventoryStock(InventoryStock inventoryStock) {
+        this.inventoryStock = inventoryStock;
+    }
+
+    public void addStock(InventoryStock inventoryStock){
+        this.inventoryStock = new InventoryStock(this.inventoryStock.value() + inventoryStock.value());
+    }
 }

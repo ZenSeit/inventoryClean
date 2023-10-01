@@ -27,20 +27,20 @@ public class RouterRest {
 
     @Bean
     public RouterFunction<ServerResponse> saveBranch(Handler handler){
-        return route(POST("/branches").and(accept(MediaType.APPLICATION_JSON)),
+        return route(POST("api/v1/branch/register").and(accept(MediaType.APPLICATION_JSON)),
                 handler::listenPOSTRegisterBranchUseCase);
     }
 
 
     @Bean
     public RouterFunction<ServerResponse> saveProduct(Handler handler){
-        return route(POST("/product").and(accept(MediaType.APPLICATION_JSON)),
+        return route(POST("api/v1/product/register").and(accept(MediaType.APPLICATION_JSON)),
                 handler::listenPOSTAddProduct);
     }
 
     @Bean
     public RouterFunction<ServerResponse> saveUser(Handler handler){
-        return route(POST("/user").and(accept(MediaType.APPLICATION_JSON)),
+        return route(POST("api/v1/user/register").and(accept(MediaType.APPLICATION_JSON)),
                 handler::listenPOSTRegisterUser);
     }
 
@@ -56,14 +56,9 @@ public class RouterRest {
     }
 
     @Bean
-    public RouterFunction<ServerResponse> patchAddProductStock(AddStockToProductUseCase addStockToProductUseCase) {
-        return route(PATCH("/products/id/{id}/stock/{stock}/add"),
-                request -> addStockToProductUseCase.apply(request.pathVariable("id"), Integer.valueOf(request.pathVariable("stock")))
-                        .flatMap(item -> ServerResponse.ok()
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .bodyValue(item))
-                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(throwable.getMessage()))
-        );
+    public RouterFunction<ServerResponse> patchAddProductStock(Handler handler) {
+        return route(PATCH("/api/v1/product/purchase").and(accept(MediaType.APPLICATION_JSON)),
+                handler::listenPATCHAddStock);
     }
 
     @Bean

@@ -36,7 +36,7 @@ public class RegisterProductUseCase extends UserCaseForCommand<AddProductCommand
                     Mono<Product> productSaved = productRepository.saveAProduct(new Product(
                             command.getName(),
                             command.getDescription(),
-                            600,
+                            0,
                             command.getPrice(),
                             command.getCategory(),
                             command.getBranchId()
