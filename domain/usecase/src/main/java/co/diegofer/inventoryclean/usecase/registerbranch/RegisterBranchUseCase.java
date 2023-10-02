@@ -9,6 +9,7 @@ import co.diegofer.inventoryclean.model.values.branch.BranchId;
 import co.diegofer.inventoryclean.model.values.branch.Location;
 import co.diegofer.inventoryclean.model.values.common.Name;
 import co.diegofer.inventoryclean.usecase.generics.DomainEventRepository;
+import co.diegofer.inventoryclean.usecase.generics.EventBus;
 import co.diegofer.inventoryclean.usecase.generics.UserCaseForCommand;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -19,9 +20,12 @@ public class RegisterBranchUseCase extends UserCaseForCommand<RegisterBranchComm
 
     private final DomainEventRepository repository;
 
-    public RegisterBranchUseCase(BranchRepository branchRepository, DomainEventRepository repository) {
+    private final EventBus eventBus;
+
+    public RegisterBranchUseCase(BranchRepository branchRepository, DomainEventRepository repository, EventBus eventBus) {
         this.branchRepository = branchRepository;
         this.repository = repository;
+        this.eventBus = eventBus;
     }
 
     @Override
@@ -36,6 +40,9 @@ public class RegisterBranchUseCase extends UserCaseForCommand<RegisterBranchComm
                     new Location(branch.getLocation())
             );
             return branchAggregate.getUncommittedChanges();
+        }).map(event -> {
+            eventBus.publish(event);
+            return event;
         }).flatMap(repository::saveEvent);
     }
 

@@ -39,7 +39,7 @@ public class RegisterFinalCustomerSaleUseCase extends UserCaseForCommand<Registe
                                 }
                         ))
                 .map(event -> {
-                    repository.saveEvent(event);
+                    //bus.saveEvent(event);
                     return event;
                 }).flatMap(repository::saveEvent)
         );
