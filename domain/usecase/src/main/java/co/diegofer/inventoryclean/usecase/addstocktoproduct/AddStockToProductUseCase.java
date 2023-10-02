@@ -8,6 +8,7 @@ import co.diegofer.inventoryclean.model.values.branch.BranchId;
 import co.diegofer.inventoryclean.model.values.product.InventoryStock;
 import co.diegofer.inventoryclean.model.values.product.ProductId;
 import co.diegofer.inventoryclean.usecase.generics.DomainEventRepository;
+import co.diegofer.inventoryclean.usecase.generics.EventBus;
 import co.diegofer.inventoryclean.usecase.generics.UserCaseForCommand;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -19,9 +20,12 @@ public class AddStockToProductUseCase extends UserCaseForCommand<BuyProductComma
 
     private final DomainEventRepository repository;
 
-    public AddStockToProductUseCase(ProductRepository productRepository, DomainEventRepository repository) {
+    private final EventBus eventBus;
+
+    public AddStockToProductUseCase(ProductRepository productRepository, DomainEventRepository repository, EventBus eventBus) {
         this.productRepository = productRepository;
         this.repository = repository;
+        this.eventBus = eventBus;
     }
 
 
@@ -43,7 +47,7 @@ public class AddStockToProductUseCase extends UserCaseForCommand<BuyProductComma
                                 }
                         ))
                 .map(event -> {
-                    repository.saveEvent(event);
+                    eventBus.publish(event);
                     return event;
                 }).flatMap(repository::saveEvent)
         );

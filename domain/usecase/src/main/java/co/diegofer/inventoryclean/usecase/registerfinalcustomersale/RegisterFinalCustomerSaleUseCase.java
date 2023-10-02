@@ -6,6 +6,7 @@ import co.diegofer.inventoryclean.model.generic.DomainEvent;
 import co.diegofer.inventoryclean.model.product.gateways.ProductRepository;
 import co.diegofer.inventoryclean.model.values.branch.BranchId;
 import co.diegofer.inventoryclean.usecase.generics.DomainEventRepository;
+import co.diegofer.inventoryclean.usecase.generics.EventBus;
 import co.diegofer.inventoryclean.usecase.generics.UserCaseForCommand;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,9 +17,12 @@ public class RegisterFinalCustomerSaleUseCase extends UserCaseForCommand<Registe
 
     private final DomainEventRepository repository;
 
-    public RegisterFinalCustomerSaleUseCase(ProductRepository productRepository, DomainEventRepository repository) {
+    private final EventBus eventBus;
+
+    public RegisterFinalCustomerSaleUseCase(ProductRepository productRepository, DomainEventRepository repository, EventBus eventBus) {
         this.productRepository = productRepository;
         this.repository = repository;
+        this.eventBus = eventBus;
     }
 
     @Override
@@ -39,7 +43,7 @@ public class RegisterFinalCustomerSaleUseCase extends UserCaseForCommand<Registe
                                 }
                         ))
                 .map(event -> {
-                    //bus.saveEvent(event);
+                    eventBus.publish(event);
                     return event;
                 }).flatMap(repository::saveEvent)
         );

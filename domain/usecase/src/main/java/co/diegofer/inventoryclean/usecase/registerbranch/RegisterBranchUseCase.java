@@ -40,7 +40,7 @@ public class RegisterBranchUseCase extends UserCaseForCommand<RegisterBranchComm
                     new Location(branch.getLocation())
             );
             return branchAggregate.getUncommittedChanges();
-        }).map(event -> {
+        }).onErrorResume(throwable -> Flux.error(throwable)).map(event -> {
             eventBus.publish(event);
             return event;
         }).flatMap(repository::saveEvent);

@@ -1,8 +1,6 @@
 package co.diegofer.inventoryclean.usecase.registerproduct;
 
 import co.diegofer.inventoryclean.model.BranchAggregate;
-import co.diegofer.inventoryclean.model.branch.Branch;
-import co.diegofer.inventoryclean.model.branch.gateways.BranchRepository;
 import co.diegofer.inventoryclean.model.commands.AddProductCommand;
 import co.diegofer.inventoryclean.model.generic.DomainEvent;
 import co.diegofer.inventoryclean.model.product.Product;
@@ -11,8 +9,8 @@ import co.diegofer.inventoryclean.model.values.branch.BranchId;
 import co.diegofer.inventoryclean.model.values.common.Name;
 import co.diegofer.inventoryclean.model.values.product.*;
 import co.diegofer.inventoryclean.usecase.generics.DomainEventRepository;
+import co.diegofer.inventoryclean.usecase.generics.EventBus;
 import co.diegofer.inventoryclean.usecase.generics.UserCaseForCommand;
-import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -22,9 +20,12 @@ public class RegisterProductUseCase extends UserCaseForCommand<AddProductCommand
 
     private final DomainEventRepository repository;
 
-    public RegisterProductUseCase(ProductRepository productRepository, DomainEventRepository repository) {
+    private final EventBus eventBus;
+
+    public RegisterProductUseCase(ProductRepository productRepository, DomainEventRepository repository, EventBus eventBus) {
         this.productRepository = productRepository;
         this.repository = repository;
+        this.eventBus = eventBus;
     }
 
 
@@ -52,7 +53,7 @@ public class RegisterProductUseCase extends UserCaseForCommand<AddProductCommand
                     );
                     return branch.getUncommittedChanges();
                 }).map(event -> {
-                    repository.saveEvent(event);
+                    eventBus.publish(event);
                     return event;
                 }).flatMap(repository::saveEvent)
         );

@@ -36,56 +36,72 @@ public class Handler {
 
     public Mono<ServerResponse> listenPOSTRegisterBranchUseCase(ServerRequest serverRequest) {
 
-        return ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(registerBranchUseCase
-                                .apply(serverRequest.bodyToMono(RegisterBranchCommand.class)),
-                        DomainEvent.class)).onErrorResume(throwable -> ServerResponse.badRequest().bodyValue(throwable.getMessage()));
+        return registerBranchUseCase.apply(serverRequest.bodyToMono(RegisterBranchCommand.class))
+                .flatMap(domainEvent -> {
+                    return ServerResponse.ok()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(BodyInserters.fromValue(domainEvent));
+                }).next()
+                .onErrorResume(Exception.class, e -> {
+                    return ServerResponse.badRequest().bodyValue(e.getMessage());
+                });
     }
 
     public Mono<ServerResponse> listenPOSTAddProduct(ServerRequest serverRequest) {
 
-        return ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(registerProductUseCase
-                                .apply(serverRequest.bodyToMono(AddProductCommand.class)),
-                        DomainEvent.class)).onErrorResume(throwable -> ServerResponse.badRequest().bodyValue(throwable.getMessage()));
+        return registerProductUseCase.apply(serverRequest.bodyToMono(AddProductCommand.class))
+                .flatMap(domainEvent -> {
+                    return ServerResponse.ok()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(BodyInserters.fromValue(domainEvent));
+                }).next()
+                .onErrorResume(Exception.class, e -> {
+                    return ServerResponse.badRequest().bodyValue(e.getMessage());
+                });
+
     }
 
     public Mono<ServerResponse> listenPOSTRegisterUser(ServerRequest serverRequest) {
 
-        return ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(registerUserUseCase
-                                .apply(serverRequest.bodyToMono(RegisterUserCommand.class)),
-                        DomainEvent.class)).onErrorResume(e -> Mono.just("Error " + e.getMessage())
-                        .flatMap(s -> ServerResponse.ok()
-                                .contentType(MediaType.TEXT_PLAIN)
-                                .bodyValue(s)));
+        return registerUserUseCase.apply(serverRequest.bodyToMono(RegisterUserCommand.class))
+                .flatMap(domainEvent -> {
+                    return ServerResponse.ok()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(BodyInserters.fromValue(domainEvent));
+                }).next()
+                .onErrorResume(Exception.class, e -> {
+                    return ServerResponse.badRequest().bodyValue(e.getMessage());
+                });
+
     }
 
     public Mono<ServerResponse> listenPATCHRegisterFinalCustomerSale(ServerRequest serverRequest) {
 
-        return ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(registerFinalCustomerSaleUseCase
-                                .apply(serverRequest.bodyToMono(RegisterFinalCustomerSaleCommand.class)),
-                        DomainEvent.class)).onErrorResume(e -> Mono.just("Error " + e.getMessage())
-                        .flatMap(s -> ServerResponse.ok()
-                                .contentType(MediaType.TEXT_PLAIN)
-                                .bodyValue(s)));
+
+        return registerFinalCustomerSaleUseCase.apply(serverRequest.bodyToMono(RegisterFinalCustomerSaleCommand.class))
+                .flatMap(domainEvent -> {
+                    return ServerResponse.ok()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(BodyInserters.fromValue(domainEvent));
+                }).next()
+                .onErrorResume(Exception.class, e -> {
+                    return ServerResponse.badRequest().bodyValue(e.getMessage());
+                });
+
     }
 
     public Mono<ServerResponse> listenPATCHAddStock(ServerRequest serverRequest) {
 
-        return ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(addStockToProductUseCase
-                                .apply(serverRequest.bodyToMono(BuyProductCommand.class)),
-                        DomainEvent.class)).onErrorResume(e -> Mono.just("Error " + e.getMessage())
-                        .flatMap(s -> ServerResponse.ok()
-                                .contentType(MediaType.TEXT_PLAIN)
-                                .bodyValue(s)));
+
+        return addStockToProductUseCase.apply(serverRequest.bodyToMono(BuyProductCommand.class))
+                .flatMap(domainEvent -> {
+                    return ServerResponse.ok()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(BodyInserters.fromValue(domainEvent));
+                }).next()
+                .onErrorResume(Exception.class, e -> {
+                    return ServerResponse.badRequest().bodyValue(e.getMessage());
+                });
     }
 
     public Mono<ServerResponse> listenGETOtherUseCase(ServerRequest serverRequest) {
