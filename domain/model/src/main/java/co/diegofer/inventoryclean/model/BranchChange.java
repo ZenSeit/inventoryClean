@@ -54,6 +54,19 @@ public class BranchChange extends EventChange {
             }
         });
 
+        apply((ResellerCustomerSaleRegistered event) -> {
+            for (ProductSale productRequested: event.getProducts()) {
+                for (ProductEntity productInBranch: branchAggregate.products) {
+                    if (Objects.equals(productRequested.getId(), productInBranch.identity().value())){
+                        productInBranch.setInventoryStock(
+                                new InventoryStock(
+                                        productInBranch.inventoryStock().value() - productRequested.getQuantity()
+                                ));
+                    }
+                }
+            }
+        });
+
         apply((FinalCustomerSaleRegistered event) -> {
             for (ProductSale productRequested: event.getProducts()) {
                 for (ProductEntity productInBranch: branchAggregate.products) {

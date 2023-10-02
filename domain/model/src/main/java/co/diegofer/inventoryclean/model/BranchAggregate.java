@@ -45,8 +45,12 @@ public class BranchAggregate extends AggregateRoot<BranchId> {
         appendChange(new UserAdded(userId.value(), name.value(), lastName.value(), email.value(), password.value(), role.value())).apply();
     }
 
-    public void registerFinalCustomerSale(List<ProductSale> products, int total){
-        appendChange(new FinalCustomerSaleRegistered(products, total)).apply();
+    public void registerFinalCustomerSale(List<ProductSale> products, Price total){
+        appendChange(new FinalCustomerSaleRegistered(products, total.value())).apply();
+    }
+
+    public void registerResellerCustomerSale(List<ProductSale> products, Price total){
+        appendChange(new ResellerCustomerSaleRegistered(products, total.value())).apply();
     }
 
     public void addStockToProduct(ProductId productId, InventoryStock inventoryStock){

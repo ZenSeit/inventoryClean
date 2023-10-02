@@ -8,13 +8,13 @@ public class ProductAdded extends DomainEvent {
     private String name;
     private String category;
     private String description;
-    private Integer price;
+    private double price;
 
     public ProductAdded() {
         super("co.diegofer.inventoryclean.model.events.ProductAdded");
     }
 
-    public ProductAdded(String productId, String name, String category, String description, Integer price) {
+    public ProductAdded(String productId, String name, String category, String description, double price) {
         super("co.diegofer.inventoryclean.model.events.ProductAdded");
         this.productId = productId;
         this.name = name;
@@ -40,7 +40,7 @@ public class ProductAdded extends DomainEvent {
     }
 
 
-    public Integer getPrice() {
+    public double getPrice() {
         return price;
     }
 }

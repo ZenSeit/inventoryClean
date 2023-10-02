@@ -1,15 +1,13 @@
 package co.diegofer.inventoryclean.api;
 
-import co.diegofer.inventoryclean.model.commands.AddProductCommand;
-import co.diegofer.inventoryclean.model.commands.BuyProductCommand;
-import co.diegofer.inventoryclean.model.commands.RegisterBranchCommand;
+import co.diegofer.inventoryclean.model.commands.*;
 import co.diegofer.inventoryclean.model.commands.RegisterFinalCustomerSaleCommand.RegisterFinalCustomerSaleCommand;
-import co.diegofer.inventoryclean.model.commands.RegisterUserCommand;
 import co.diegofer.inventoryclean.model.generic.DomainEvent;
 import co.diegofer.inventoryclean.usecase.addstocktoproduct.AddStockToProductUseCase;
 import co.diegofer.inventoryclean.usecase.registerbranch.RegisterBranchUseCase;
 import co.diegofer.inventoryclean.usecase.registerfinalcustomersale.RegisterFinalCustomerSaleUseCase;
 import co.diegofer.inventoryclean.usecase.registerproduct.RegisterProductUseCase;
+import co.diegofer.inventoryclean.usecase.registerresellersale.RegisterResellerSaleUseCase;
 import co.diegofer.inventoryclean.usecase.registeruser.RegisterUserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -32,6 +30,8 @@ public class Handler {
     private final RegisterFinalCustomerSaleUseCase registerFinalCustomerSaleUseCase;
 
     private final AddStockToProductUseCase addStockToProductUseCase;
+
+    private final RegisterResellerSaleUseCase registerResellerSaleUseCase;
 
 
     public Mono<ServerResponse> listenPOSTRegisterBranchUseCase(ServerRequest serverRequest) {
@@ -79,6 +79,21 @@ public class Handler {
 
 
         return registerFinalCustomerSaleUseCase.apply(serverRequest.bodyToMono(RegisterFinalCustomerSaleCommand.class))
+                .flatMap(domainEvent -> {
+                    return ServerResponse.ok()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(BodyInserters.fromValue(domainEvent));
+                }).next()
+                .onErrorResume(Exception.class, e -> {
+                    return ServerResponse.badRequest().bodyValue(e.getMessage());
+                });
+
+    }
+
+    public Mono<ServerResponse> listenPATCHRegisterResellerSale (ServerRequest serverRequest) {
+
+
+        return registerResellerSaleUseCase.apply(serverRequest.bodyToMono(RegisterResellerCustomerSaleCommand.class))
                 .flatMap(domainEvent -> {
                     return ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON)

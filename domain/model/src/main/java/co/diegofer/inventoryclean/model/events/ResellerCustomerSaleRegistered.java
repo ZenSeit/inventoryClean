@@ -5,17 +5,17 @@ import co.diegofer.inventoryclean.model.generic.DomainEvent;
 
 import java.util.List;
 
-public class FinalCustomerSaleRegistered extends DomainEvent {
+public class ResellerCustomerSaleRegistered extends DomainEvent {
 
     List<ProductSale> products;
     double total;
 
-    public FinalCustomerSaleRegistered() {
-        super("co.diegofer.inventoryclean.model.events.FinalCustomerSaleRegistered");
+    public ResellerCustomerSaleRegistered() {
+        super("co.diegofer.inventoryclean.model.events.ResellerCustomerSaleRegistered");
     }
 
-    public FinalCustomerSaleRegistered(List<ProductSale> products, double total) {
-        super("co.diegofer.inventoryclean.model.events.FinalCustomerSaleRegistered");
+    public ResellerCustomerSaleRegistered(List<ProductSale> products, double total) {
+        super("co.diegofer.inventoryclean.model.events.ResellerCustomerSaleRegistered");
         this.products = products;
         this.total = total;
     }

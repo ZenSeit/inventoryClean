@@ -20,6 +20,9 @@ public class RabbitMqEventBus implements EventBus {
     public static final String BRANCH_CREATED_ROUTING_KEY = "inventory.events.branch.created.routing.key";
     public static final String PRODUCT_ADDED_ROUTING_KEY = "inventory.events.product.added.routing.key";
     public static final String USER_ADDED_ROUTING_KEY = "inventory.events.user.added.routing.key";
+    public static final String CUSTOMER_SALE_REGISTERED_ROUTING_KEY = "inventory.events.customer.sale.registered.routing.key";
+    public static final String RESELLER_SALE_REGISTERED_ROUTING_KEY = "inventory.events.reseller.sale.registered.routing.key";
+    public static final String STOCK_ADDED_ROUTING_KEY = "inventory.events.stock.added.routing.key";
     private final RabbitTemplate template;
     private final JSONMapper eventSerializer;
 
@@ -36,7 +39,9 @@ public class RabbitMqEventBus implements EventBus {
         else if (event instanceof ProductAdded) routingKey=PRODUCT_ADDED_ROUTING_KEY;
         else if (event instanceof UserAdded) routingKey=USER_ADDED_ROUTING_KEY;
         else if (event instanceof StockAdded) routingKey=PRODUCT_ADDED_ROUTING_KEY;
-        else if (event instanceof FinalCustomerSaleRegistered) routingKey=PRODUCT_ADDED_ROUTING_KEY;
+        else if (event instanceof FinalCustomerSaleRegistered) routingKey=CUSTOMER_SALE_REGISTERED_ROUTING_KEY;
+        else if (event instanceof ResellerCustomerSaleRegistered) routingKey=RESELLER_SALE_REGISTERED_ROUTING_KEY;
+        else if (event instanceof StockAdded) routingKey=STOCK_ADDED_ROUTING_KEY;
         else routingKey=ROUTING_KEY;
 
         template.convertAndSend(
