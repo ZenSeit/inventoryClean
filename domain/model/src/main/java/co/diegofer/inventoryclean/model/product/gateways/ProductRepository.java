@@ -11,6 +11,7 @@ public interface ProductRepository {
 
     public Mono<Product> saveAProduct(Product product);
     public Flux<Product> findProductsByBranch(String branchId);
+    public Flux<Product> findAllProducts();
     public Mono<Product> addStock(String productId, Integer quantity);
     public Mono<List<ProductSale>> reduceStock(List<ProductSale> productsRequested);
 }

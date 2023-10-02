@@ -46,6 +46,12 @@ public class ProductRepositoryAdapter implements ProductRepository {
     }
 
     @Override
+    public Flux<Product> findAllProducts() {
+        return productRepository.findAll()
+                .map(product -> mapper.map(product, Product.class));
+    }
+
+    @Override
     public Mono<Product> addStock(String productId, Integer quantity) {
         return productRepository.findById(productId)
                 .switchIfEmpty(Mono.error(new IllegalArgumentException("Product with id: " + productId + " was not found")))

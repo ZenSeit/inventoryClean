@@ -5,6 +5,8 @@ import co.diegofer.inventoryclean.model.commands.RegisterBranchCommand;
 import co.diegofer.inventoryclean.model.product.Product;
 import co.diegofer.inventoryclean.model.user.User;
 import co.diegofer.inventoryclean.usecase.addstocktoproduct.AddStockToProductUseCase;
+import co.diegofer.inventoryclean.usecase.getallbranches.GetAllBranchesUseCase;
+import co.diegofer.inventoryclean.usecase.getallproducts.GetAllProductsUseCase;
 import co.diegofer.inventoryclean.usecase.getproductsbybranchid.GetProductsByBranchIdUseCase;
 import co.diegofer.inventoryclean.usecase.reducestockproduct.ReduceStockProductUseCase;
 import co.diegofer.inventoryclean.usecase.registerbranch.RegisterBranchUseCase;
@@ -50,6 +52,28 @@ public class RouterRest {
                 request -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(BodyInserters.fromPublisher(getProductsByBranchIdUseCase.apply(request.pathVariable("branch_id")), Product.class))
+                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(throwable.getMessage()))
+        );
+
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> getBranches(GetAllBranchesUseCase getAllBranchesUseCase) {
+        return route(GET("/api/v1/branch/"),
+                request -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(getAllBranchesUseCase.apply(), Branch.class))
+                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(throwable.getMessage()))
+        );
+
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> getAllProducts(GetAllProductsUseCase getAllProductsUseCase) {
+        return route(GET("/api/v1/product/"),
+                request -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(getAllProductsUseCase.apply(), Product.class))
                         .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(throwable.getMessage()))
         );
 

@@ -1,11 +1,12 @@
 package co.diegofer.inventoryclean.model.commands;
 
+import co.diegofer.inventoryclean.model.commands.custom.LocationCommand;
 import co.diegofer.inventoryclean.model.generic.Command;
 
 public class RegisterBranchCommand extends Command {
 
     private String name;
-    private String location;
+    private LocationCommand location;
 
     public RegisterBranchCommand() {
     }
@@ -15,15 +16,9 @@ public class RegisterBranchCommand extends Command {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getLocation() {
-        return location;
+        return location.getLocation();
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
 }

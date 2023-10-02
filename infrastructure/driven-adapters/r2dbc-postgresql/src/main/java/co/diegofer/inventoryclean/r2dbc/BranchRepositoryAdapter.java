@@ -8,6 +8,7 @@ import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
@@ -31,4 +32,11 @@ public class BranchRepositoryAdapter implements BranchRepository {
                 mapper.map(branchData, Branch.class))
                 .onErrorMap(DataIntegrityViolationException.class, e -> new DataIntegrityViolationException("Error creating branch: "+e.getMessage()));
     }
+
+    @Override
+    public Flux<Branch> findAllBranches() {
+        return branchRepository.findAll()
+                .map(branch -> mapper.map(branch, Branch.class));
+    }
+
 }
