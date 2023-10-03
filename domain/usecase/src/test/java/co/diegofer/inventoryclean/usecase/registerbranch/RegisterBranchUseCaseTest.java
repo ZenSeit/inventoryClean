@@ -53,8 +53,11 @@ class RegisterBranchUseCaseTest {
         );
 
         Branch savedBranch = new Branch("Branch name", "Location, country");
+        savedBranch.setId("root");
 
-        when(branchRepository.saveABranch(savedBranch)).thenReturn(Mono.just(savedBranch));
+        when(branchRepository.saveABranch(Mockito.any())).thenReturn(
+                Mono.just(savedBranch));
+
         when(repository.saveEvent(Mockito.any())).thenReturn(Mono.just(new BranchCreated()));
 
         // Act
