@@ -53,7 +53,6 @@ public class RegisterUserUseCase extends UserCaseForCommand<RegisterUserCommand>
                             .flatMapMany(
 
                                     savedUser ->{
-                                        System.out.println("savedUser: "+savedUser.getName());
                                         BranchAggregate branch = BranchAggregate.from(BranchId.of(command.getBranchId()), events);
                                         branch.addUser(
                                                 UserId.of(savedUser.getId()),

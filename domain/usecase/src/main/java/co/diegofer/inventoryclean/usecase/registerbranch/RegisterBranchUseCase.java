@@ -31,16 +31,24 @@ public class RegisterBranchUseCase extends UserCaseForCommand<RegisterBranchComm
     @Override
     public Flux<DomainEvent> apply(Mono<RegisterBranchCommand> registerBranchCommandMono) {
 
-        Mono<Branch> branchSaved =  registerBranchCommandMono.flatMap(command -> branchRepository.saveABranch(new Branch(command.getName(), command.getLocation())));
+        return registerBranchCommandMono.flatMapMany(command -> {
+                    Name name = new Name(command.getName());
+                    Location location = new Location(command.getLocation());
 
-        return branchSaved.flatMapIterable(branch -> {
-            BranchAggregate branchAggregate = new BranchAggregate(
-                    BranchId.of(branch.getId()),
-                    new Name(branch.getName()),
-                    new Location(branch.getLocation())
-            );
-            return branchAggregate.getUncommittedChanges();
-        }).onErrorResume(throwable -> Flux.error(throwable)).map(event -> {
+                    return branchRepository.saveABranch(new Branch(name.value(), location.value()))
+                            .flatMapMany(branchSaved -> {
+
+                                BranchAggregate branchAggregate = new BranchAggregate(
+                                        BranchId.of(branchSaved.getId()),
+                                        new Name(branchSaved.getName()),
+                                        new Location(branchSaved.getLocation())
+                                );
+
+                                return Flux.fromIterable(branchAggregate.getUncommittedChanges());
+                            });
+                }
+
+        ).map(event -> {
             eventBus.publish(event);
             return event;
         }).flatMap(repository::saveEvent);

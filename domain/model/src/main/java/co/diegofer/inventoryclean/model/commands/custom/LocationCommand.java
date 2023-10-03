@@ -5,6 +5,13 @@ public class LocationCommand {
     String city;
     String country;
 
+    public LocationCommand() {
+    }
+
+    public LocationCommand(String city, String country) {
+    }
+
+
     public String getCity() {
         return city;
     }

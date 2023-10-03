@@ -11,6 +11,10 @@ public class RegisterBranchCommand extends Command {
     public RegisterBranchCommand() {
     }
 
+    public RegisterBranchCommand(String name, LocationCommand location) {
+        this.name = name;
+        this.location = location;
+    }
 
     public String getName() {
         return name;
