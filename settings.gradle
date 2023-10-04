@@ -9,9 +9,11 @@ pluginManagement {
 rootProject.name = 'inventoryProject'
 
 include ':app-service'
+include ':app-storage'
 include ':model'
 include ':usecase'
 project(':app-service').projectDir = file('./applications/app-service')
+project(':app-storage').projectDir = file('./applications/app-storage')
 project(':model').projectDir = file('./domain/model')
 project(':usecase').projectDir = file('./domain/usecase')
 include ':r2dbc-postgresql'
@@ -24,3 +26,5 @@ include ':serializer'
 project(':serializer').projectDir = file('./infrastructure/helpers/serializer')
 include ':async-event-bus'
 project(':async-event-bus').projectDir = file('./infrastructure/driven-adapters/async-event-bus')
+include ':mq-listener'
+project(':mq-listener').projectDir = file('./infrastructure/entry-points/mq-listener')

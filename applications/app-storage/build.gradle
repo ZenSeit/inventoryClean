@@ -1,7 +1,7 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-	//implementation project( ':mq-listener')
+    implementation project( ':mq-listener')
 	implementation project( ':async-event-bus')
 	implementation project( ':serializer')
 	implementation project( ':mongo-repository')

@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 spring:
   application:
     name: "inventoryProject"
@@ -25,13 +25,3 @@ management:
         enabled: true
 cors:
   allowed-origins: "http://localhost:4200,http://localhost:8080"
-commons:
-  jms:
-    input-concurrency: 10
-    input-queue: "DEV.QUEUE.2"
-    input-queue-alias: ""
-    reactive: true
-ibm:
-  mq:
-    channel: "DEV.APP.SVRCONN"
-    user: "app"

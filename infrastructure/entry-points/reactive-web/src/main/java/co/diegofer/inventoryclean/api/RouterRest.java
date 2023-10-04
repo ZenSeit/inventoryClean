@@ -1,17 +1,11 @@
 package co.diegofer.inventoryclean.api;
 
 import co.diegofer.inventoryclean.model.branch.Branch;
-import co.diegofer.inventoryclean.model.commands.RegisterBranchCommand;
 import co.diegofer.inventoryclean.model.product.Product;
-import co.diegofer.inventoryclean.model.user.User;
-import co.diegofer.inventoryclean.usecase.addstocktoproduct.AddStockToProductUseCase;
 import co.diegofer.inventoryclean.usecase.getallbranches.GetAllBranchesUseCase;
 import co.diegofer.inventoryclean.usecase.getallproducts.GetAllProductsUseCase;
 import co.diegofer.inventoryclean.usecase.getproductsbybranchid.GetProductsByBranchIdUseCase;
-import co.diegofer.inventoryclean.usecase.reducestockproduct.ReduceStockProductUseCase;
-import co.diegofer.inventoryclean.usecase.registerbranch.RegisterBranchUseCase;
-import co.diegofer.inventoryclean.usecase.registerproduct.RegisterProductUseCase;
-import co.diegofer.inventoryclean.usecase.registeruser.RegisterUserUseCase;
+import co.diegofer.inventoryclean.usecase.service.reducestockproduct.ReduceStockProductUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -19,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Mono;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;

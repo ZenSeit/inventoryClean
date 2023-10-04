@@ -1,4 +1,4 @@
-package co.diegofer.inventoryclean.usecase.registerbranch;
+package co.diegofer.inventoryclean.usecase.service.registerbranch;
 
 import co.diegofer.inventoryclean.model.BranchAggregate;
 import co.diegofer.inventoryclean.model.branch.Branch;
@@ -14,16 +14,16 @@ import co.diegofer.inventoryclean.usecase.generics.UserCaseForCommand;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class RegisterBranchUseCase extends UserCaseForCommand<RegisterBranchCommand> {
+import java.util.UUID;
 
-    private final BranchRepository branchRepository;
+public class RegisterBranchUseCase extends UserCaseForCommand<RegisterBranchCommand> {
 
     private final DomainEventRepository repository;
 
     private final EventBus eventBus;
 
-    public RegisterBranchUseCase(BranchRepository branchRepository, DomainEventRepository repository, EventBus eventBus) {
-        this.branchRepository = branchRepository;
+    public RegisterBranchUseCase(DomainEventRepository repository, EventBus eventBus) {
+
         this.repository = repository;
         this.eventBus = eventBus;
     }
@@ -35,17 +35,14 @@ public class RegisterBranchUseCase extends UserCaseForCommand<RegisterBranchComm
                     Name name = new Name(command.getName());
                     Location location = new Location(command.getLocation());
 
-                    return branchRepository.saveABranch(new Branch(name.value(), location.value()))
-                            .flatMapMany(branchSaved -> {
-
                                 BranchAggregate branchAggregate = new BranchAggregate(
-                                        BranchId.of(branchSaved.getId()),
-                                        new Name(branchSaved.getName()),
-                                        new Location(branchSaved.getLocation())
+                                        BranchId.of(UUID.randomUUID().toString()),
+                                        name,
+                                        location
                                 );
 
                                 return Flux.fromIterable(branchAggregate.getUncommittedChanges());
-                            });
+
                 }
 
         ).map(event -> {

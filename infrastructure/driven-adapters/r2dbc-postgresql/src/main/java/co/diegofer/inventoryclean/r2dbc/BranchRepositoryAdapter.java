@@ -25,9 +25,9 @@ public class BranchRepositoryAdapter implements BranchRepository {
 
     @Override
     public Mono<Branch> saveABranch(Branch branch) {
-        String newId = UUID.randomUUID().toString();
+        //String newId = UUID.randomUUID().toString();
         BranchData branchData = mapper.map(branch, BranchData.class);
-        branchData.setId(newId);
+        //branchData.setId(newId);
         return branchRepository.saveBranch(branchData.getId(),branchData.getName(),branchData.getLocation()).thenReturn(
                 mapper.map(branchData, Branch.class))
                 .onErrorMap(DataIntegrityViolationException.class, e -> new DataIntegrityViolationException("Error creating branch: "+e.getMessage()));

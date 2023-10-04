@@ -1,20 +1,18 @@
-package co.diegofer.inventoryclean.usecase.addstocktoproduct;
+package co.diegofer.inventoryclean.usecase.service.registerfinalcustomersale;
 
 import co.diegofer.inventoryclean.model.BranchAggregate;
-import co.diegofer.inventoryclean.model.commands.BuyProductCommand;
+import co.diegofer.inventoryclean.model.commands.RegisterFinalCustomerSaleCommand.RegisterFinalCustomerSaleCommand;
 import co.diegofer.inventoryclean.model.generic.DomainEvent;
 import co.diegofer.inventoryclean.model.product.gateways.ProductRepository;
 import co.diegofer.inventoryclean.model.values.branch.BranchId;
-import co.diegofer.inventoryclean.model.values.product.InventoryStock;
-import co.diegofer.inventoryclean.model.values.product.ProductId;
+import co.diegofer.inventoryclean.model.values.product.Price;
 import co.diegofer.inventoryclean.usecase.generics.DomainEventRepository;
 import co.diegofer.inventoryclean.usecase.generics.EventBus;
 import co.diegofer.inventoryclean.usecase.generics.UserCaseForCommand;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-
-public class AddStockToProductUseCase extends UserCaseForCommand<BuyProductCommand> {
+public class RegisterFinalCustomerSaleUseCase extends UserCaseForCommand<RegisterFinalCustomerSaleCommand> {
 
     private final ProductRepository productRepository;
 
@@ -22,25 +20,24 @@ public class AddStockToProductUseCase extends UserCaseForCommand<BuyProductComma
 
     private final EventBus eventBus;
 
-    public AddStockToProductUseCase(ProductRepository productRepository, DomainEventRepository repository, EventBus eventBus) {
+    public RegisterFinalCustomerSaleUseCase(ProductRepository productRepository, DomainEventRepository repository, EventBus eventBus) {
         this.productRepository = productRepository;
         this.repository = repository;
         this.eventBus = eventBus;
     }
 
-
     @Override
-    public Flux<DomainEvent> apply(Mono<BuyProductCommand> buyProductCommandMono) {
-        return buyProductCommandMono.flatMapMany(command -> repository.findById(command.getBranchId())
+    public Flux<DomainEvent> apply(Mono<RegisterFinalCustomerSaleCommand> registerFinalCustomerSaleCommandMono) {
+        return registerFinalCustomerSaleCommandMono.flatMapMany(command -> repository.findById(command.getBranchId())
                 .collectList()
-                .flatMapMany(events -> productRepository.addStock(command.getProductId(), command.getQuantity())
+                .flatMapMany(events -> productRepository.reduceStock(command.getProducts())
                         .flatMapMany(
 
-                                productsStockAdded ->{
+                                productsStockReduced ->{
                                     BranchAggregate branch = BranchAggregate.from(BranchId.of(command.getBranchId()), events);
-                                    branch.addStockToProduct(
-                                            ProductId.of(command.getProductId()),
-                                            new InventoryStock(command.getQuantity())
+                                    branch.registerFinalCustomerSale(
+                                            command.getProducts(),
+                                            new Price(branch.calculateTotal(command.getProducts()))
                                     );
 
                                     return Flux.fromIterable(branch.getUncommittedChanges());

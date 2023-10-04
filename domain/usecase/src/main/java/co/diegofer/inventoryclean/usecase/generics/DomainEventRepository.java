@@ -1,5 +1,6 @@
 package co.diegofer.inventoryclean.usecase.generics;
 
+
 import co.diegofer.inventoryclean.model.generic.DomainEvent;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

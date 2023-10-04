@@ -1,4 +1,4 @@
-package co.diegofer.inventoryclean.usecase.reducestockproduct;
+package co.diegofer.inventoryclean.usecase.service.reducestockproduct;
 
 import co.diegofer.inventoryclean.model.product.Product;
 import co.diegofer.inventoryclean.model.product.gateways.ProductRepository;

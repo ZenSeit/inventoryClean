@@ -1,4 +1,4 @@
-package co.diegofer.inventoryclean.usecase.registerproduct;
+package co.diegofer.inventoryclean.usecase.service.registerproduct;
 
 import co.diegofer.inventoryclean.model.BranchAggregate;
 import co.diegofer.inventoryclean.model.commands.AddProductCommand;

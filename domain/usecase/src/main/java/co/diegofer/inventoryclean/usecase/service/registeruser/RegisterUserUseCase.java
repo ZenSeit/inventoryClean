@@ -1,4 +1,4 @@
-package co.diegofer.inventoryclean.usecase.registeruser;
+package co.diegofer.inventoryclean.usecase.service.registeruser;
 
 import co.diegofer.inventoryclean.model.BranchAggregate;
 import co.diegofer.inventoryclean.model.commands.RegisterUserCommand;
