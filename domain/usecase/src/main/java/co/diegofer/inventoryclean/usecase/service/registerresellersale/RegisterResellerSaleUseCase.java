@@ -33,19 +33,16 @@ public class RegisterResellerSaleUseCase extends UserCaseForCommand<RegisterRese
     public Flux<DomainEvent> apply(Mono<RegisterResellerCustomerSaleCommand> registerResellerCustomerSaleCommandMono) {
         return registerResellerCustomerSaleCommandMono.flatMapMany(command -> repository.findById(command.getBranchId())
                 .collectList()
-                .flatMapMany(events -> productRepository.reduceStock(command.getProducts())
-                        .flatMapMany(
+                .flatMapMany(events -> {
+                            BranchAggregate branch = BranchAggregate.from(BranchId.of(command.getBranchId()), events);
+                            branch.registerResellerCustomerSale(
+                                    command.getProducts(),
+                                    new Price(branch.calculateTotal(command.getProducts()) * 0.7)
+                            );
 
-                                productsStockReduced ->{
-                                    BranchAggregate branch = BranchAggregate.from(BranchId.of(command.getBranchId()), events);
-                                    branch.registerResellerCustomerSale(
-                                            command.getProducts(),
-                                            new Price(branch.calculateTotal(command.getProducts())*0.7)
-                                    );
-
-                                    return Flux.fromIterable(branch.getUncommittedChanges());
-                                }
-                        ))
+                            return Flux.fromIterable(branch.getUncommittedChanges());
+                        }
+                        )
                 .map(event -> {
                     eventBus.publish(event);
                     return event;

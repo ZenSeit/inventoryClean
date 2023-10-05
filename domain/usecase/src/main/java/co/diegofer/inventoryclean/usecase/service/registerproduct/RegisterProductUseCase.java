@@ -14,16 +14,15 @@ import co.diegofer.inventoryclean.usecase.generics.UserCaseForCommand;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class RegisterProductUseCase extends UserCaseForCommand<AddProductCommand> {
+import java.util.UUID;
 
-    private final ProductRepository productRepository;
+public class RegisterProductUseCase extends UserCaseForCommand<AddProductCommand> {
 
     private final DomainEventRepository repository;
 
     private final EventBus eventBus;
 
-    public RegisterProductUseCase(ProductRepository productRepository, DomainEventRepository repository, EventBus eventBus) {
-        this.productRepository = productRepository;
+    public RegisterProductUseCase(DomainEventRepository repository, EventBus eventBus) {
         this.repository = repository;
         this.eventBus = eventBus;
     }
@@ -34,18 +33,9 @@ public class RegisterProductUseCase extends UserCaseForCommand<AddProductCommand
         return addProductCommandMono.flatMapMany(command -> repository.findById(command.getBranchId())
                 .collectList()
                 .flatMapIterable(events -> {
-                    Mono<Product> productSaved = productRepository.saveAProduct(new Product(
-                            command.getName(),
-                            command.getDescription(),
-                            0,
-                            command.getPrice(),
-                            command.getCategory(),
-                            command.getBranchId()
-                    ));
-
                     BranchAggregate branch = BranchAggregate.from(BranchId.of(command.getBranchId()),events);
                     branch.addProduct(
-                            ProductId.of(productSaved.block().getId()),
+                            ProductId.of(UUID.randomUUID().toString()),
                             new Name(command.getName()),
                             new Category(command.getCategory()),
                             new Description(command.getDescription()),
