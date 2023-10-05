@@ -28,9 +28,9 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     @Override
     public Mono<Product> saveAProduct(Product product) {
-        String newId = UUID.randomUUID().toString();
+        //String newId = UUID.randomUUID().toString();
         ProductData productData = mapper.map(product, ProductData.class);
-        productData.setId(newId);
+        //productData.setId(newId);
 
         return productRepository.saveProduct(productData.getId(),productData.getName(),productData.getDescription(),
                 productData.getInventoryStock(),productData.getPrice(),productData.getCategory(),productData.getBranchId()).thenReturn(
@@ -56,7 +56,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
         return productRepository.findById(productId)
                 .switchIfEmpty(Mono.error(new IllegalArgumentException("Product with id: " + productId + " was not found")))
                 .flatMap(product -> {
-                    product.setInventoryStock(product.getInventoryStock() + quantity);
+                    product.setInventoryStock(product.getInventoryStock()+quantity);
                     return productRepository.save(product);
                 }).map(product -> mapper.map(product, Product.class));
 

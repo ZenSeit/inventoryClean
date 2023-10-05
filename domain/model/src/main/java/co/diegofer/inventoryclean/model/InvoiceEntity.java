@@ -2,29 +2,29 @@ package co.diegofer.inventoryclean.model;
 
 import co.diegofer.inventoryclean.model.commands.RegisterFinalCustomerSaleCommand.ProductSale;
 import co.diegofer.inventoryclean.model.generic.Entity;
-import co.diegofer.inventoryclean.model.values.product.ProductId;
+import co.diegofer.inventoryclean.model.values.invoice.InvoiceId;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class InvoiceEntity extends Entity<ProductId> {
+public class InvoiceEntity extends Entity<InvoiceId> {
 
-    private String id;
     private List<ProductSale> products;
     private double total;
     private LocalDateTime date;
 
-    public InvoiceEntity(ProductId id, String id1, List<ProductSale> products, double total, LocalDateTime date) {
+    private String sellType;
+
+    private String branchId;
+
+    public InvoiceEntity(InvoiceId id, List<ProductSale> products, double total, String sellType, String branchId) {
         super(id);
-        this.id = id1;
         this.products = products;
         this.total = total;
-        this.date = date;
-    }
-
-    public String getId() {
-        return id;
+        this.date = LocalDateTime.now();
+        this.branchId = branchId;
+        this.sellType = sellType;
     }
 
     public List<ProductSale> getProducts() {
@@ -37,6 +37,14 @@ public class InvoiceEntity extends Entity<ProductId> {
 
     public LocalDateTime getDate() {
         return date;
+    }
+
+    public String getBranchId() {
+        return branchId;
+    }
+
+    public String getSellType() {
+        return sellType;
     }
 
 }

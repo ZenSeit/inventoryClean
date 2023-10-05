@@ -10,6 +10,8 @@ public class FinalCustomerSaleRegistered extends DomainEvent {
     List<ProductSale> products;
     double total;
 
+    String sellType;
+
     public FinalCustomerSaleRegistered() {
         super("co.diegofer.inventoryclean.model.events.FinalCustomerSaleRegistered");
     }
@@ -18,6 +20,7 @@ public class FinalCustomerSaleRegistered extends DomainEvent {
         super("co.diegofer.inventoryclean.model.events.FinalCustomerSaleRegistered");
         this.products = products;
         this.total = total;
+        this.sellType = "FinalCustomerSale";
     }
 
     public List<ProductSale> getProducts() {
@@ -26,6 +29,10 @@ public class FinalCustomerSaleRegistered extends DomainEvent {
 
     public double getTotal() {
         return total;
+    }
+
+    public String getSellType() {
+        return sellType;
     }
 
     public void setTotal(double total) {

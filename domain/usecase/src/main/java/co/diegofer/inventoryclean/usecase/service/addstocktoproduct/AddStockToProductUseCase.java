@@ -33,10 +33,8 @@ public class AddStockToProductUseCase extends UserCaseForCommand<BuyProductComma
     public Flux<DomainEvent> apply(Mono<BuyProductCommand> buyProductCommandMono) {
         return buyProductCommandMono.flatMapMany(command -> repository.findById(command.getBranchId())
                 .collectList()
-                .flatMapMany(events -> productRepository.addStock(command.getProductId(), command.getQuantity())
                         .flatMapMany(
-
-                                productsStockAdded ->{
+                                events ->{
                                     BranchAggregate branch = BranchAggregate.from(BranchId.of(command.getBranchId()), events);
                                     branch.addStockToProduct(
                                             ProductId.of(command.getProductId()),
@@ -49,7 +47,6 @@ public class AddStockToProductUseCase extends UserCaseForCommand<BuyProductComma
                 .map(event -> {
                     eventBus.publish(event);
                     return event;
-                }).flatMap(repository::saveEvent)
-        );
+                }).flatMap(repository::saveEvent);
     }
 }

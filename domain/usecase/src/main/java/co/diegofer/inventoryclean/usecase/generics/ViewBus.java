@@ -9,6 +9,6 @@ import co.diegofer.inventoryclean.model.user.User;
 public interface ViewBus {
 
     void publishBranch(DomainEvent event);
-    void publishUser(User user);
-    void publishProduct(Product product);
+    void publishUser(DomainEvent event);
+    void publishProduct(DomainEvent event);
 }

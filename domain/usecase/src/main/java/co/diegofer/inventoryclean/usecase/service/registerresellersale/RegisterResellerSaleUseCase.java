@@ -16,14 +16,11 @@ import reactor.core.publisher.Mono;
 
 public class RegisterResellerSaleUseCase extends UserCaseForCommand<RegisterResellerCustomerSaleCommand> {
 
-    private final ProductRepository productRepository;
-
     private final DomainEventRepository repository;
 
     private final EventBus eventBus;
 
-    public RegisterResellerSaleUseCase(ProductRepository productRepository, DomainEventRepository repository, EventBus eventBus) {
-        this.productRepository = productRepository;
+    public RegisterResellerSaleUseCase(DomainEventRepository repository, EventBus eventBus) {
         this.repository = repository;
         this.eventBus = eventBus;
     }

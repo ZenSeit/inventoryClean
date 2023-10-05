@@ -21,16 +21,32 @@ public class RabbitMQMessageListener {
     private final SocketController socketController;
 
     private final JSONMapper eventSerializer;
+
+    public static final String BRANCH_CREATED_SOCKET_QUEUE = "inventory.events.branch.created.socket.queue";
+    public static final String PRODUCT_ADDED_SOCKET_QUEUE = "inventory.events.product.added.socket.queue";
+    public static final String USER_ADDED_SOCKET_QUEUE = "inventory.events.user.added.socket.queue";
+    public static final String CUSTOMER_SALE_REGISTERED_SOCKET_QUEUE = "inventory.events.customer.sale.registered.socket.queue";
+    public static final String RESELLER_SALE_REGISTERED_SOCKET_QUEUE = "inventory.events.reseller.sale.registered.socket.queue";
+    public static final String STOCK_ADDED_SOCKET_QUEUE = "inventory.events.stock.added.socket.queue";
     private final Logger logger = Logger.getLogger("StorageMessageListener");
     private final JSONMapper mapper = new JSONMapperImpl();
 
-    @RabbitListener(queues = "inventory.events.branch.created.socket.queue")
+    @RabbitListener(queues = BRANCH_CREATED_SOCKET_QUEUE)
     public void process(String message) throws ClassNotFoundException {
         Notification notification = Notification.from(message);
         DomainEvent event = (DomainEvent) eventSerializer
                 .readFromJson(notification.getBody(), Class.forName(notification.getType()));
         System.out.println("Sending branch created event to socket");
         socketController.sendBranchCreated("mainSpace", event);
+    }
+
+    @RabbitListener(queues = PRODUCT_ADDED_SOCKET_QUEUE)
+    public void processTwo(String message) throws ClassNotFoundException {
+        Notification notification = Notification.from(message);
+        DomainEvent event = (DomainEvent) eventSerializer
+                .readFromJson(notification.getBody(), Class.forName(notification.getType()));
+        System.out.println("Sending branch created event to socket");
+        //socketController.sendBranchCreated(event.aggregateRootId(), event);
     }
 
 }

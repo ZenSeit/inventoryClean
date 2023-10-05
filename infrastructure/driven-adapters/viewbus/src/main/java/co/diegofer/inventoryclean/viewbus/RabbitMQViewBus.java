@@ -45,16 +45,21 @@ public class RabbitMQViewBus implements ViewBus {
     }
 
     @Override
-    public void publishUser(User user) {
+    public void publishUser(DomainEvent event) {
 
     }
 
     @Override
-    public void publishProduct(Product product) {
+    public void publishProduct(DomainEvent event) {
         template.convertAndSend(
                 EXCHANGE,
                 PRODUCT_ADDED_ROUTING_KEY,
-                eventSerializer.writeToJson(product).getBytes()
+                new Notification(
+                        event.getClass().getTypeName(),
+                        eventSerializer.writeToJson(event)
+                )
+                        .serialize()
+                        .getBytes()
         );
 
     }
