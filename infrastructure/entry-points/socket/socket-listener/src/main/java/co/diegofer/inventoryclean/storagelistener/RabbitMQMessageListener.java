@@ -2,7 +2,6 @@ package co.diegofer.inventoryclean.storagelistener;
 
 
 
-import co.diegofer.inventoryclean.model.branch.Branch;
 import co.diegofer.inventoryclean.model.generic.DomainEvent;
 import co.diegofer.inventoryclean.serializer.JSONMapper;
 import co.diegofer.inventoryclean.serializer.JSONMapperImpl;

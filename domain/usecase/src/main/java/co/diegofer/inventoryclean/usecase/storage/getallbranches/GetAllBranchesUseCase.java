@@ -1,4 +1,4 @@
-package co.diegofer.inventoryclean.usecase.getallbranches;
+package co.diegofer.inventoryclean.usecase.storage.getallbranches;
 
 import co.diegofer.inventoryclean.model.branch.Branch;
 import co.diegofer.inventoryclean.model.branch.gateways.BranchRepository;

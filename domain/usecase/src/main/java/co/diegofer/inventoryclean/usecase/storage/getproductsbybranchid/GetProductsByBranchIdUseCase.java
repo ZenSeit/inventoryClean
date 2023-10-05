@@ -1,4 +1,4 @@
-package co.diegofer.inventoryclean.usecase.getproductsbybranchid;
+package co.diegofer.inventoryclean.usecase.storage.getproductsbybranchid;
 
 import co.diegofer.inventoryclean.model.product.Product;
 import co.diegofer.inventoryclean.model.product.gateways.ProductRepository;

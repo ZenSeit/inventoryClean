@@ -1,4 +1,4 @@
-package co.diegofer.inventoryclean.usecase.getallproducts;
+package co.diegofer.inventoryclean.usecase.storage.getallproducts;
 
 import co.diegofer.inventoryclean.model.product.Product;
 import co.diegofer.inventoryclean.model.product.gateways.ProductRepository;

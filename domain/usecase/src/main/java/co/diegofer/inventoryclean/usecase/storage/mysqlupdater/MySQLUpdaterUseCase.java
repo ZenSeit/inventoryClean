@@ -2,7 +2,7 @@ package co.diegofer.inventoryclean.usecase.storage.mysqlupdater;
 
 
 import co.diegofer.inventoryclean.model.generic.DomainEvent;
-import co.diegofer.inventoryclean.usecase.MySQLUpdater;
+import co.diegofer.inventoryclean.usecase.storage.MySQLUpdater;
 
 import java.util.function.Consumer;
 
