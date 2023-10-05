@@ -9,7 +9,8 @@ import org.springframework.context.annotation.FilterType;
         includeFilters = {
                 @ComponentScan.Filter(type = FilterType.REGEX, pattern = "^.+UseCase$"),
                 @ComponentScan.Filter(type = FilterType.REGEX, pattern = "^.+Repository$"),
-                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "^.+Updater$")
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "^.+Updater$"),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "^.+Bus$")
         },
         useDefaultFilters = false)
 public class UseCasesConfig {

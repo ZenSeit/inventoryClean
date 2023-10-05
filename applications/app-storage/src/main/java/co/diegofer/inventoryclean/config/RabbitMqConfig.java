@@ -9,22 +9,23 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMqConfig {
-
     public static final String EXCHANGE = "inventory_exchange";
-    public static final String BRANCH_CREATED_QUEUE = "inventory.events.branch.created.queue";
-    public static final String PRODUCT_ADDED_QUEUE = "inventory.events.product.added.queue";
-    public static final String USER_ADDED_QUEUE = "inventory.events.user.added.queue";
-    public static final String CUSTOMER_SALE_REGISTERED_QUEUE = "inventory.events.customer.sale.registered.queue";
-    public static final String RESELLER_SALE_REGISTERED_QUEUE = "inventory.events.reseller.sale.registered.queue";
-    public static final String STOCK_ADDED_QUEUE = "inventory.events.stock.added.queue";
-    public static final String GENERAL_QUEUE = "inventory.events.queue";
-    public static final String BRANCH_CREATED_ROUTING_KEY = "inventory.events.branch.created.routing.key";
-    public static final String PRODUCT_ADDED_ROUTING_KEY = "inventory.events.product.added.routing.key";
-    public static final String USER_ADDED_ROUTING_KEY = "inventory.events.user.added.routing.key";
-    public static final String CUSTOMER_SALE_REGISTERED_ROUTING_KEY = "inventory.events.customer.sale.registered.routing.key";
-    public static final String RESELLER_SALE_REGISTERED_ROUTING_KEY = "inventory.events.reseller.sale.registered.routing.key";
-    public static final String STOCK_ADDED_ROUTING_KEY = "inventory.events.stock.added.routing.key";
-    public static final String GENERAL_ROUTING_KEY = "inventory.events.routing.key";
+
+    public static final String BRANCH_CREATED_SOCKET_QUEUE = "inventory.events.branch.created.socket.queue";
+    public static final String PRODUCT_ADDED_SOCKET_QUEUE = "inventory.events.product.added.socket.queue";
+    public static final String USER_ADDED_SOCKET_QUEUE = "inventory.events.user.added.socket.queue";
+    public static final String CUSTOMER_SALE_REGISTERED_SOCKET_QUEUE = "inventory.events.customer.sale.registered.socket.queue";
+    public static final String RESELLER_SALE_REGISTERED_SOCKET_QUEUE = "inventory.events.reseller.sale.registered.socket.queue";
+    public static final String STOCK_ADDED_SOCKET_QUEUE = "inventory.events.stock.added.socket.queue";
+    public static final String GENERAL_EVENTS_QUEUE = "inventory.events.queue";
+
+    public static final String BRANCH_CREATED_ROUTING_KEY = "inventory.events.branch.created.#";
+    public static final String PRODUCT_ADDED_ROUTING_KEY = "inventory.events.product.added.#";
+    public static final String USER_ADDED_ROUTING_KEY = "inventory.events.user.added.routing.#";
+    public static final String CUSTOMER_SALE_REGISTERED_ROUTING_KEY = "inventory.events.customer.sale.registered.#";
+    public static final String RESELLER_SALE_REGISTERED_ROUTING_KEY = "inventory.events.reseller.sale.registered.#";
+    public static final String STOCK_ADDED_ROUTING_KEY = "inventory.events.stock.added.#";
+    public static final String GENERAL_ROUTING_KEY = "inventory.events.#";
 
 
     @Bean
@@ -32,87 +33,97 @@ public class RabbitMqConfig {
         return new TopicExchange(EXCHANGE);
     }
 
-    @Bean
-    public Queue branchCreatedQueue() {
-        return new Queue(BRANCH_CREATED_QUEUE);
-    }
 
     @Bean
-    public Queue productCreatedQueue() {
-        return new Queue(PRODUCT_ADDED_QUEUE);
+    public Queue branchCreatedSocketQueue() {
+        return new Queue(BRANCH_CREATED_SOCKET_QUEUE);
     }
 
-    @Bean
-    public Queue userCreatedQueue() {
-        return new Queue(USER_ADDED_QUEUE);
-    }
 
     @Bean
-    public Queue customerSaleRegisteredQueue() {
-        return new Queue(CUSTOMER_SALE_REGISTERED_QUEUE);
+    public Queue productCreatedSocketQueue() {
+        return new Queue(PRODUCT_ADDED_SOCKET_QUEUE);
     }
 
-    @Bean
-    public Queue resellerSaleRegisteredQueue() {
-        return new Queue(RESELLER_SALE_REGISTERED_QUEUE);
-    }
 
     @Bean
-    public Queue stockAddedQueue() {
-        return new Queue(STOCK_ADDED_QUEUE);
+    public Queue userCreatedSocketQueue() {
+        return new Queue(USER_ADDED_SOCKET_QUEUE);
+    }
+
+
+    @Bean
+    public Queue customerSaleRegisteredSocketQueue() {
+        return new Queue(CUSTOMER_SALE_REGISTERED_SOCKET_QUEUE);
+    }
+
+
+    @Bean
+    public Queue resellerSaleRegisteredSocketQueue() {
+        return new Queue(RESELLER_SALE_REGISTERED_SOCKET_QUEUE);
+    }
+
+
+    @Bean
+    public Queue stockAddedSocketQueue() {
+        return new Queue(STOCK_ADDED_SOCKET_QUEUE);
     }
 
 
     @Bean
     public Queue generalQueue() {
-        return new Queue(GENERAL_QUEUE);
+        return new Queue(GENERAL_EVENTS_QUEUE);
     }
 
 
     @Bean
-    public Binding branchCreatedBinding() {
+    public Binding branchCreatedSocketBinding() {
         return BindingBuilder
-                .bind(this.branchCreatedQueue())
+                .bind(this.branchCreatedSocketQueue())
                 .to(this.eventsExchange())
                 .with(BRANCH_CREATED_ROUTING_KEY);
     }
 
+
     @Bean
-    public Binding productAddedBinding() {
+    public Binding productAddedSocketBinding() {
         return BindingBuilder
-                .bind(this.productCreatedQueue())
+                .bind(this.productCreatedSocketQueue())
                 .to(this.eventsExchange())
                 .with(PRODUCT_ADDED_ROUTING_KEY);
     }
 
+
     @Bean
-    public Binding userAddedBinding() {
+    public Binding userAddedSocketBinding() {
         return BindingBuilder
-                .bind(this.userCreatedQueue())
+                .bind(this.userCreatedSocketQueue())
                 .to(this.eventsExchange())
                 .with(USER_ADDED_ROUTING_KEY);
     }
 
+
     @Bean
-    public Binding customerSaleRegisteredBinding() {
+    public Binding customerSaleRegisteredSocketBinding() {
         return BindingBuilder
-                .bind(this.customerSaleRegisteredQueue())
+                .bind(this.customerSaleRegisteredSocketQueue())
                 .to(this.eventsExchange())
                 .with(CUSTOMER_SALE_REGISTERED_ROUTING_KEY);
     }
 
+
     @Bean
-    public Binding resellerSaleRegisteredBinding() {
+    public Binding resellerSaleRegisteredSocketBinding() {
         return BindingBuilder
-                .bind(this.resellerSaleRegisteredQueue())
+                .bind(this.resellerSaleRegisteredSocketQueue())
                 .to(this.eventsExchange())
                 .with(RESELLER_SALE_REGISTERED_ROUTING_KEY);
     }
 
     @Bean
-    public Binding stockAddedBinding() {
+    public Binding stockAddedSocketBinding() {
         return BindingBuilder
-                .bind(this.stockAddedQueue())
+                .bind(this.stockAddedSocketQueue())
                 .to(this.eventsExchange())
                 .with(STOCK_ADDED_ROUTING_KEY);
     }

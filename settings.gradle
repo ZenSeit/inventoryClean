@@ -10,21 +10,29 @@ rootProject.name = 'inventoryProject'
 
 include ':app-service'
 include ':app-storage'
+include ':app-socket'
 include ':model'
 include ':usecase'
 project(':app-service').projectDir = file('./applications/app-service')
 project(':app-storage').projectDir = file('./applications/app-storage')
+project(':app-socket').projectDir = file('./applications/app-socket')
 project(':model').projectDir = file('./domain/model')
 project(':usecase').projectDir = file('./domain/usecase')
 include ':r2dbc-postgresql'
 project(':r2dbc-postgresql').projectDir = file('./infrastructure/driven-adapters/r2dbc-postgresql')
 include ':reactive-web'
-project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')
+project(':reactive-web').projectDir = file('./infrastructure/entry-points/service/reactive-web')
 include ':mongo-repository'
 project(':mongo-repository').projectDir = file('./infrastructure/driven-adapters/mongo-repository')
 include ':serializer'
 project(':serializer').projectDir = file('./infrastructure/helpers/serializer')
 include ':async-event-bus'
 project(':async-event-bus').projectDir = file('./infrastructure/driven-adapters/async-event-bus')
-include ':mq-listener'
-project(':mq-listener').projectDir = file('./infrastructure/entry-points/mq-listener')
+include ':storage-listener'
+project(':storage-listener').projectDir = file('./infrastructure/entry-points/storage/storage-listener')
+include ':socket-listener'
+project(':socket-listener').projectDir = file('./infrastructure/entry-points/socket/socket-listener')
+include ':socket-responder'
+project(':socket-responder').projectDir = file('./infrastructure/entry-points/socket/socket-responder')
+include ':viewbus'
+project(':viewbus').projectDir = file('./infrastructure/driven-adapters/viewbus')

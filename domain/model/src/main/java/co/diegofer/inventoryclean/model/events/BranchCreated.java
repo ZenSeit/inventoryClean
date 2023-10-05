@@ -4,6 +4,7 @@ import co.diegofer.inventoryclean.model.generic.DomainEvent;
 
 public class BranchCreated extends DomainEvent {
 
+
     private String name;
     private String location;
     public BranchCreated() {

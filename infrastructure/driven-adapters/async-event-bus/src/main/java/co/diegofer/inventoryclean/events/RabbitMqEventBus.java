@@ -34,15 +34,13 @@ public class RabbitMqEventBus implements EventBus {
     @Override
     public void publish(DomainEvent event) {
         String routingKey;
-
-        if (event instanceof BranchCreated) routingKey=BRANCH_CREATED_ROUTING_KEY;
-        else if (event instanceof ProductAdded) routingKey=PRODUCT_ADDED_ROUTING_KEY;
-        else if (event instanceof UserAdded) routingKey=USER_ADDED_ROUTING_KEY;
-        else if (event instanceof StockAdded) routingKey=STOCK_ADDED_ROUTING_KEY;
-        else if (event instanceof FinalCustomerSaleRegistered) routingKey=CUSTOMER_SALE_REGISTERED_ROUTING_KEY;
-        else if (event instanceof ResellerCustomerSaleRegistered) routingKey=RESELLER_SALE_REGISTERED_ROUTING_KEY;
-        else routingKey=ROUTING_KEY;
-
+        if (event instanceof BranchCreated) routingKey = BRANCH_CREATED_ROUTING_KEY;
+        else if (event instanceof ProductAdded) routingKey = PRODUCT_ADDED_ROUTING_KEY;
+        else if (event instanceof UserAdded) routingKey = USER_ADDED_ROUTING_KEY;
+        else if (event instanceof FinalCustomerSaleRegistered) routingKey = CUSTOMER_SALE_REGISTERED_ROUTING_KEY;
+        else if (event instanceof ResellerCustomerSaleRegistered) routingKey = RESELLER_SALE_REGISTERED_ROUTING_KEY;
+        else if (event instanceof StockAdded) routingKey = STOCK_ADDED_ROUTING_KEY;
+        else routingKey = ROUTING_KEY;
         template.convertAndSend(
                 EXCHANGE,
                 routingKey,

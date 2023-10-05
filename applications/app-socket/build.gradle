@@ -1,12 +1,13 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-    implementation project(':viewbus')
-    implementation project( ':async-event-bus')
+    implementation project( ':socket-listener')
+	implementation project( ':async-event-bus')
+    implementation project( ':viewbus')
     implementation project( ':serializer')
-    implementation project( ':mongo-repository')
-    implementation project( ':reactive-web')
-    implementation project( ':r2dbc-postgresql')
+	implementation project( ':mongo-repository')
+	//implementation project( ':reactive-web')
+	implementation project( ':r2dbc-postgresql')
     implementation project(':model')
     implementation project(':usecase')
     implementation 'org.springframework.boot:spring-boot-starter'
@@ -22,6 +23,8 @@ dependencies {
     testImplementation 'io.projectreactor:reactor-test'
     implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: '3.0.4'
+
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.register('explodedJar', Copy) {
