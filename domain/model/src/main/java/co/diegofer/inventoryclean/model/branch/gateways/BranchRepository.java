@@ -9,4 +9,6 @@ public interface BranchRepository {
     public Mono<Branch> saveABranch(Branch branch);
 
     public Flux<Branch> findAllBranches();
+
+    public Mono<Branch> findBranchById(String branchId);
 }

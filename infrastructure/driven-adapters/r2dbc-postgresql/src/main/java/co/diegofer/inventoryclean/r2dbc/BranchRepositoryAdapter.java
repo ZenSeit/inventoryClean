@@ -25,20 +25,10 @@ public class BranchRepositoryAdapter implements BranchRepository {
 
     @Override
     public Mono<Branch> saveABranch(Branch branch) {
-        //String newId = UUID.randomUUID().toString();
         BranchData branchData = mapper.map(branch, BranchData.class);
-        //branchData.setId(newId);
         return branchRepository.saveBranch(branchData.getId(),branchData.getName(),branchData.getLocation()).flatMap(savedBranchData -> Mono.just(mapper.map(savedBranchData, Branch.class)))
                 .onErrorMap(DataIntegrityViolationException.class, e -> new DataIntegrityViolationException("Error creating branch: "+e.getMessage()));
-        /*BranchData branchData = mapper.map(branch, BranchData.class);
-        dbClient.sql("insert into Branch(id, name, location) values(:id, :name, :location)")
-                .bind("id", branch.getId())
-                .bind("name", branchData.getName())
-                .bind("location", branchData.getLocation())
-                .fetch()
-                .one()
-                .subscribe();
-        return Mono.just(branch);*/
+
 
     }
 
@@ -46,6 +36,14 @@ public class BranchRepositoryAdapter implements BranchRepository {
     public Flux<Branch> findAllBranches() {
         return branchRepository.findAll()
                 .map(branch -> mapper.map(branch, Branch.class));
+    }
+
+    @Override
+    public Mono<Branch> findBranchById(String branchId) {
+        return branchRepository.findById(branchId)
+                .switchIfEmpty(Mono.empty())
+                .map(branch -> mapper.map(branch, Branch.class))
+                .onErrorResume(e -> Mono.error(new IllegalArgumentException("Branch not found")));
     }
 
 }

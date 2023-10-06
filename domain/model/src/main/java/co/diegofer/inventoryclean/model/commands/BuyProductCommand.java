@@ -6,7 +6,7 @@ public class BuyProductCommand extends Command {
 
     private String productId;
     private String branchId;
-    private Integer quantity;
+    private Integer quantityToAdd;
 
     public BuyProductCommand() {
     }
@@ -20,7 +20,7 @@ public class BuyProductCommand extends Command {
         return branchId;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public Integer getQuantityToAdd() {
+        return quantityToAdd;
     }
 }

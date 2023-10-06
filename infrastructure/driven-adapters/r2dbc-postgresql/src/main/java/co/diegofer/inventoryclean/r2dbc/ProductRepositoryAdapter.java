@@ -41,8 +41,9 @@ public class ProductRepositoryAdapter implements ProductRepository {
     @Override
     public Flux<Product> findProductsByBranch(String branchId) {
         return productRepository.findByBranchId(branchId)
-                .switchIfEmpty(Mono.error(new IllegalArgumentException("Branch not found")))
-                .map(product -> mapper.map(product, Product.class));
+                .switchIfEmpty(Mono.empty())
+                .map(product -> mapper.map(product, Product.class))
+                .onErrorResume(e -> Mono.error(new IllegalArgumentException("Branch not found")));
     }
 
     @Override
