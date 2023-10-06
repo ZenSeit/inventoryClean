@@ -74,5 +74,23 @@ public class SocketController {
         }
     }
 
+    public void sendProductAdded(String correlationId, DomainEvent domainEvent) {
+        String message = eventSerializer.writeToJson(domainEvent);
+        if (Objects.nonNull(correlationId) && sessions.containsKey(correlationId)) {
+            logger.info("Sent from: " + correlationId);
+            System.out.println(message);
+            sessions
+                    .get(correlationId)
+                    .values()
+                    .forEach(session -> {
+                        try {
+                            session.getAsyncRemote().sendText(message);
+                        } catch (RuntimeException e) {
+                            logger.log(Level.SEVERE, e.getMessage(), e);
+                        }
+                    });
+        }
+    }
+
 
 }

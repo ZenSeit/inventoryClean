@@ -39,54 +39,11 @@ public class RouterRest {
                 handler::listenPOSTRegisterUser);
     }
 
-    @Bean
-    public RouterFunction<ServerResponse> getProductsByBranch(GetProductsByBranchIdUseCase getProductsByBranchIdUseCase) {
-        return route(GET("/products/{branch_id}"),
-                request -> ServerResponse.ok()
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getProductsByBranchIdUseCase.apply(request.pathVariable("branch_id")), Product.class))
-                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(throwable.getMessage()))
-        );
-
-    }
-
-    @Bean
-    public RouterFunction<ServerResponse> getBranches(GetAllBranchesUseCase getAllBranchesUseCase) {
-        return route(GET("/api/v1/branch/"),
-                request -> ServerResponse.ok()
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getAllBranchesUseCase.apply(), Branch.class))
-                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(throwable.getMessage()))
-        );
-
-    }
-
-    @Bean
-    public RouterFunction<ServerResponse> getAllProducts(GetAllProductsUseCase getAllProductsUseCase) {
-        return route(GET("/api/v1/product/"),
-                request -> ServerResponse.ok()
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getAllProductsUseCase.apply(), Product.class))
-                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(throwable.getMessage()))
-        );
-
-    }
 
     @Bean
     public RouterFunction<ServerResponse> patchAddProductStock(Handler handler) {
         return route(PATCH("/api/v1/product/purchase").and(accept(MediaType.APPLICATION_JSON)),
                 handler::listenPATCHAddStock);
-    }
-
-    @Bean
-    public RouterFunction<ServerResponse> patchReduceProductStock(ReduceStockProductUseCase reduceStockProductUseCase) {
-        return route(PATCH("/products/id/{id}/stock/{stock}/reduce"),
-                request -> reduceStockProductUseCase.apply(request.pathVariable("id"), Integer.valueOf(request.pathVariable("stock")))
-                        .flatMap(item -> ServerResponse.ok()
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .bodyValue(item))
-                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(throwable.getMessage()))
-        );
     }
 
     @Bean
@@ -98,7 +55,7 @@ public class RouterRest {
     @Bean
     public RouterFunction<ServerResponse> patchRegisterResellerSale(Handler handler){
         return route(PATCH("/api/v1/product/reseller-sale").and(accept(MediaType.APPLICATION_JSON)),
-                handler::listenPATCHRegisterFinalCustomerSale);
+                handler::listenPATCHRegisterResellerSale);
     }
 
 }

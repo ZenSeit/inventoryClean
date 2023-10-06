@@ -40,13 +40,13 @@ public class RabbitMQMessageListener {
         socketController.sendBranchCreated("mainSpace", event);
     }
 
-    @RabbitListener(queues = PRODUCT_ADDED_SOCKET_QUEUE)
+    @RabbitListener(queues = {PRODUCT_ADDED_SOCKET_QUEUE,STOCK_ADDED_SOCKET_QUEUE,CUSTOMER_SALE_REGISTERED_SOCKET_QUEUE,RESELLER_SALE_REGISTERED_SOCKET_QUEUE})
     public void processTwo(String message) throws ClassNotFoundException {
         Notification notification = Notification.from(message);
         DomainEvent event = (DomainEvent) eventSerializer
                 .readFromJson(notification.getBody(), Class.forName(notification.getType()));
-        System.out.println("Sending branch created event to socket");
-        //socketController.sendBranchCreated(event.aggregateRootId(), event);
+        System.out.println("Sending product created event to socket");
+        socketController.sendProductAdded(event.aggregateRootId(), event);
     }
 
 }

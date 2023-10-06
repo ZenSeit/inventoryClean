@@ -23,11 +23,11 @@ public class MySQLUpdater extends DomainUpdater {
 
     //private final ViewBus bus;
 
-    public MySQLUpdater(BranchRepository branchRepository, ProductRepository productRepository, UserRepository userRepository, InvoiceRepository invoiceRepository, InvoiceRepository invoiceRepository1) {
+    public MySQLUpdater(BranchRepository branchRepository, ProductRepository productRepository, UserRepository userRepository, InvoiceRepository invoiceRepository) {
         this.branchRepository = branchRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
-        this.invoiceRepository = invoiceRepository1;
+        this.invoiceRepository = invoiceRepository;
 
         //this.bus = bus;
         //this.bus = bus;
@@ -36,21 +36,17 @@ public class MySQLUpdater extends DomainUpdater {
         listen((BranchCreated event) -> {
             Branch branch = new Branch(event.aggregateRootId(), event.getName(), event.getLocation());
             branchRepository.saveABranch(branch).subscribe();
-            //bus.publishBranch(event);
         });
 
         listen((ProductAdded event) -> {
             Product product = new Product(event.getProductId(), event.getName(),event.getDescription(), 0, event.getPrice(), event.getCategory(), event.aggregateRootId());
             productRepository.saveAProduct(product).subscribe();
-            //bus.publishProduct(event);
         });
 
         listen((UserAdded event) -> {
             System.out.println(event.getUserId());
             User user = new User(event.getUserId(), event.getName(), event.getLastName(), event.getEmail(), event.getPassword(),event.getRole(), event.aggregateRootId());
             userRepository.saveAUser(user).subscribe();
-            //bus.publishProduct(product);
-            //System.out.println("User added"+user.toString());
         });
 
         listen((StockAdded event) -> {
@@ -58,6 +54,11 @@ public class MySQLUpdater extends DomainUpdater {
         });
 
         listen((FinalCustomerSaleRegistered event) -> {
+            productRepository.reduceStock(event.getProducts()).subscribe();
+            invoiceRepository.saveInvoice(new InvoiceEntity(InvoiceId.of(UUID.randomUUID().toString()), event.getProducts(), event.getTotal(),event.getSellType() ,event.aggregateRootId())).subscribe();
+        });
+
+        listen((ResellerCustomerSaleRegistered event) -> {
             productRepository.reduceStock(event.getProducts()).subscribe();
             invoiceRepository.saveInvoice(new InvoiceEntity(InvoiceId.of(UUID.randomUUID().toString()), event.getProducts(), event.getTotal(),event.getSellType() ,event.aggregateRootId())).subscribe();
         });

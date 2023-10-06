@@ -6,6 +6,7 @@ dependencies {
     implementation project( ':viewbus')
     implementation project( ':serializer')
 	implementation project( ':mongo-repository')
+	implementation project( ':mongo-repository-storage')
 	//implementation project( ':reactive-web')
 	implementation project( ':r2dbc-postgresql')
     implementation project(':model')
