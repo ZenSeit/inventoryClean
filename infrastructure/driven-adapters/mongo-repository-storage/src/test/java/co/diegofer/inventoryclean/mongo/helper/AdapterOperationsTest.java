@@ -1,6 +1,6 @@
 package co.diegofer.inventoryclean.mongo.helper;
 
-import co.diegofer.inventoryclean.mongo.MongoRepositoryAdapter;
+//import co.diegofer.inventoryclean.mongo.MongoRepositoryAdapter;
 import co.diegofer.inventoryclean.serializer.JSONMapper;
 import org.mockito.Mock;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
@@ -16,7 +16,7 @@ class AdapterOperationsTest {
     @Mock
     private JSONMapper objectMapper;
 
-    private MongoRepositoryAdapter adapter;
+    //private MongoRepositoryAdapter adapter;
 
     private Object entity;
     private Flux<Object> entities;

@@ -1,0 +1,74 @@
+version: '3.9'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: database
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: inventory
+    ports:
+      - "3306:3306"
+    restart: on-failure
+    networks:
+      - mynetwork
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    restart: on-failure
+    networks:
+      - mynetwork
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - mynetwork
+
+  service-app:
+    image: zenseit/app-service
+    container_name: service
+    ports:
+      - '8080:8080'
+    depends_on:
+      - mysql
+    restart: on-failure
+    networks:
+      - mynetwork
+
+  storage-app:
+    image: zenseit/app-storage
+    container_name: storage
+    ports:
+      - '8081:8081'
+    depends_on:
+      - mysql
+    restart: on-failure
+    networks:
+      - mynetwork
+
+  socket-app:
+    image: zenseit/app-socket
+    container_name: socket
+    ports:
+      - '8082:8082'
+    depends_on:
+      - mysql
+    restart: on-failure
+    networks:
+      - mynetwork
+
+  front-app:
+    image: zenseit/inventory-front
+    ports:
+      - '4200:4200'
+    restart: on-failure
+    networks:
+      - mynetwork
+
+
+networks:
+  mynetwork:

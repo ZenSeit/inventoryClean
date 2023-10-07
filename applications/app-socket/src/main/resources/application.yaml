@@ -1,19 +1,25 @@
 server:
   port: 8082
+  error:
+    include-message: always
 spring:
   application:
     name: "inventoryProject"
   devtools:
     add-properties: false
-  h2:
-    console:
-      enabled: true
-      path: "/h2"
-  profiles:
-    include: null
+  r2dbc:
+    url: r2dbc:mysql://database:3306/inventory
+    username: root
+    password: root
   data:
     mongodb:
-      uri: "mongodb://localhost:27017/test"
+      uri: "mongodb://mongodb:27017/inventoryDB"
+  rabbitmq:
+    host: "rabbitmq"
+    username: "guest"
+    password: "guest"
+    virtual-host: "/"
+    port: 5672
 management:
   endpoints:
     web:
@@ -24,4 +30,4 @@ management:
       probes:
         enabled: true
 cors:
-  allowed-origins: "http://localhost:4200,http://localhost:8080"
+  allowed-origins: "http://localhost:4200,http://localhost:8080,http://inventory-front:4200"
