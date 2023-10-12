@@ -17,4 +17,7 @@ public interface UserRepositoryR2dbc extends ReactiveCrudRepository<UserData, St
                             @Param("email") String email,
                             @Param("role") String role,
                             @Param("branchId") String branchId);
+
+    @Query("SELECT * FROM User WHERE email = :email")
+    Mono<UserData> findByEmail(@Param("email") String email);
 }

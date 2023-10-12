@@ -8,8 +8,12 @@ public class Role implements ValueObject<String> {
     private final String role;
 
     public Role(String value){
-        if(!RoleEnum.contains(value)) throw new IllegalArgumentException("Role is not valid");
-        this.role = value;
+        try {
+            RoleEnum.valueOf(value.toUpperCase());
+            this.role = value.toUpperCase();
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Role is not valid");
+        }
     }
 
     @Override

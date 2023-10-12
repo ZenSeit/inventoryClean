@@ -1,0 +1,35 @@
+server:
+  port: 8083
+  error:
+    include-message: always
+spring:
+  application:
+    name: "inventoryProject"
+  devtools:
+    add-properties: false
+  r2dbc:
+    url: "${R2DBC_URI:r2dbc:mysql://localhost:3306/inventory}"
+    username: root
+    password: root
+  data:
+    mongodb:
+      uri: "${MONGO_URI:mongodb://localhost:27017/inventoryDB}"
+  rabbitmq:
+    host: "${RABBIT_URI:localhost:5672}"
+    username: "guest"
+    password: "guest"
+    virtual-host: "/"
+    port: 5672
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,prometheus"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+cors:
+  allowedOriginPatterns: "*"
+
+

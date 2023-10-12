@@ -3,10 +3,12 @@ package co.diegofer.inventoryclean.api;
 import co.diegofer.inventoryclean.model.commands.*;
 import co.diegofer.inventoryclean.model.commands.RegisterFinalCustomerSaleCommand.RegisterFinalCustomerSaleCommand;
 import co.diegofer.inventoryclean.usecase.service.addstocktoproduct.AddStockToProductUseCase;
+import co.diegofer.inventoryclean.usecase.service.loginuser.LoginUserUseCase;
 import co.diegofer.inventoryclean.usecase.service.registerbranch.RegisterBranchUseCase;
 import co.diegofer.inventoryclean.usecase.service.registerfinalcustomersale.RegisterFinalCustomerSaleUseCase;
 import co.diegofer.inventoryclean.usecase.service.registerproduct.RegisterProductUseCase;
 import co.diegofer.inventoryclean.usecase.service.registerresellersale.RegisterResellerSaleUseCase;
+import co.diegofer.inventoryclean.usecase.service.registersuper.RegisterSuperUseCase;
 import co.diegofer.inventoryclean.usecase.service.registeruser.RegisterUserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -31,6 +33,10 @@ public class Handler {
     private final AddStockToProductUseCase addStockToProductUseCase;
 
     private final RegisterResellerSaleUseCase registerResellerSaleUseCase;
+
+    private final RegisterSuperUseCase registerSuperUseCase;
+
+    private final LoginUserUseCase loginUserUseCase;
 
 
     public Mono<ServerResponse> listenPOSTRegisterBranchUseCase(ServerRequest serverRequest) {
@@ -72,6 +78,33 @@ public class Handler {
                     return ServerResponse.badRequest().bodyValue(e.getMessage());
                 });
 
+    }
+
+    public Mono<ServerResponse> listenPOSTRegisterSuper(ServerRequest serverRequest) {
+
+        return registerSuperUseCase.apply(serverRequest.bodyToMono(RegisterUserCommand.class))
+                .flatMap(domainEvent -> {
+                    return ServerResponse.ok()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(BodyInserters.fromValue(domainEvent));
+                })
+                .onErrorResume(Exception.class, e -> {
+                    return ServerResponse.badRequest().bodyValue(e.getMessage());
+                });
+
+    }
+
+    public Mono<ServerResponse> listenPOSTLoginUser(ServerRequest serverRequest) {
+
+        return loginUserUseCase.apply(serverRequest.bodyToMono(LoginCommand.class))
+                .flatMap(domainEvent -> {
+                    return ServerResponse.ok()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(BodyInserters.fromValue(domainEvent));
+                })
+                .onErrorResume(Exception.class, e -> {
+                    return ServerResponse.badRequest().bodyValue(e.getMessage());
+                });
     }
 
     public Mono<ServerResponse> listenPATCHRegisterFinalCustomerSale(ServerRequest serverRequest) {

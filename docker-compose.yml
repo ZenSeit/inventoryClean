@@ -2,7 +2,7 @@ version: '3.9'
 services:
   mysql:
     image: mysql:latest
-    container_name: database
+    container_name: mysql-service
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: inventory
@@ -14,6 +14,7 @@ services:
 
   mongodb:
     image: mongo:latest
+    container_name: mongodb-service
     ports:
       - "27017:27017"
     restart: on-failure
@@ -22,6 +23,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
+    container_name: rabbitmq-service
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -62,7 +64,8 @@ services:
       - mynetwork
 
   front-app:
-    image: zenseit/inventory-front
+    image: zenseit/inventory-front:1.8
+    container_name: front
     ports:
       - '4200:4200'
     restart: on-failure

@@ -1,7 +1,7 @@
 pluginManagement {
     repositories {
-        //mavenLocal()
-        //maven { url '...' }
+        mavenLocal()
+        maven { url '...' }
         gradlePluginPortal()
     }
 }
@@ -11,17 +11,21 @@ rootProject.name = 'inventoryProject'
 include ':app-service'
 include ':app-storage'
 include ':app-socket'
+include ':app-auth'
 include ':model'
 include ':usecase'
 project(':app-service').projectDir = file('./applications/app-service')
 project(':app-storage').projectDir = file('./applications/app-storage')
 project(':app-socket').projectDir = file('./applications/app-socket')
+project(':app-auth').projectDir = file('./applications/app-auth')
 project(':model').projectDir = file('./domain/model')
 project(':usecase').projectDir = file('./domain/usecase')
 include ':r2dbc-postgresql'
 project(':r2dbc-postgresql').projectDir = file('./infrastructure/driven-adapters/r2dbc-postgresql')
 include ':reactive-web'
 project(':reactive-web').projectDir = file('./infrastructure/entry-points/service/reactive-web')
+include ':reactive-auth'
+project(':reactive-auth').projectDir = file('./infrastructure/entry-points/auth/reactive-auth')
 include ':reactive-storage'
 project(':reactive-storage').projectDir = file('./infrastructure/entry-points/storage/reactive-storage')
 include ':mongo-repository'
