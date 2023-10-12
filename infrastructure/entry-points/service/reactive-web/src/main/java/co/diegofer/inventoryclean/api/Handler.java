@@ -94,18 +94,6 @@ public class Handler {
 
     }
 
-    public Mono<ServerResponse> listenPOSTLoginUser(ServerRequest serverRequest) {
-
-        return loginUserUseCase.apply(serverRequest.bodyToMono(LoginCommand.class))
-                .flatMap(domainEvent -> {
-                    return ServerResponse.ok()
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .body(BodyInserters.fromValue(domainEvent));
-                })
-                .onErrorResume(Exception.class, e -> {
-                    return ServerResponse.badRequest().bodyValue(e.getMessage());
-                });
-    }
 
     public Mono<ServerResponse> listenPATCHRegisterFinalCustomerSale(ServerRequest serverRequest) {
 

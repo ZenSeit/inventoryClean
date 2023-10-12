@@ -20,17 +20,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Configuration
 public class RouterRest {
 
-    @Bean
-    public RouterFunction<ServerResponse> saveUser(Handler handler){
-        return route(POST("api/v1/user/register").and(accept(MediaType.APPLICATION_JSON)),
-                handler::listenPOSTRegisterUser);
-    }
 
-    @Bean
-    public RouterFunction<ServerResponse> saveSuper(Handler handler){
-        return route(POST("api/v1/user/registersuper").and(accept(MediaType.APPLICATION_JSON)),
-                handler::listenPOSTRegisterSuper);
-    }
 
     @Bean
     public RouterFunction<ServerResponse> loginUser(Handler handler){

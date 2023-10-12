@@ -10,7 +10,7 @@ dependencies {
     implementation project( ':serializer')
     implementation project( ':mongo-repository')
     implementation project( ':mongo-repository-storage')
-    implementation project(':reactive-web')
+    implementation project(':reactive-auth')
     implementation project( ':r2dbc-postgresql')
     implementation project(':model')
     implementation project(':usecase')

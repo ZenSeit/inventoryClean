@@ -23,47 +23,9 @@ import reactor.core.publisher.Mono;
 public class Handler {
 
 
-    private final RegisterUserUseCase registerUserUseCase;
-
-    private final RegisterFinalCustomerSaleUseCase registerFinalCustomerSaleUseCase;
-
-    private final AddStockToProductUseCase addStockToProductUseCase;
-
-    private final RegisterResellerSaleUseCase registerResellerSaleUseCase;
-
-    private final RegisterSuperUseCase registerSuperUseCase;
-
     private final LoginUserUseCase loginUserUseCase;
 
 
-
-    public Mono<ServerResponse> listenPOSTRegisterUser(ServerRequest serverRequest) {
-
-        return registerUserUseCase.apply(serverRequest.bodyToMono(RegisterUserCommand.class))
-                .flatMap(domainEvent -> {
-                    return ServerResponse.ok()
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .body(BodyInserters.fromValue(domainEvent));
-                }).next()
-                .onErrorResume(Exception.class, e -> {
-                    return ServerResponse.badRequest().bodyValue(e.getMessage());
-                });
-
-    }
-
-    public Mono<ServerResponse> listenPOSTRegisterSuper(ServerRequest serverRequest) {
-
-        return registerSuperUseCase.apply(serverRequest.bodyToMono(RegisterUserCommand.class))
-                .flatMap(domainEvent -> {
-                    return ServerResponse.ok()
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .body(BodyInserters.fromValue(domainEvent));
-                })
-                .onErrorResume(Exception.class, e -> {
-                    return ServerResponse.badRequest().bodyValue(e.getMessage());
-                });
-
-    }
 
     public Mono<ServerResponse> listenPOSTLoginUser(ServerRequest serverRequest) {
 

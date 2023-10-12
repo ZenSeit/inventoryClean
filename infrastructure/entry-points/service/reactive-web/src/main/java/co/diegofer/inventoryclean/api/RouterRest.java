@@ -45,12 +45,6 @@ public class RouterRest {
                 handler::listenPOSTRegisterSuper);
     }
 
-    @Bean
-    public RouterFunction<ServerResponse> loginUser(Handler handler){
-        return route(POST("api/v1/user/login").and(accept(MediaType.APPLICATION_JSON)),
-                handler::listenPOSTLoginUser);
-    }
-
 
     @Bean
     public RouterFunction<ServerResponse> patchAddProductStock(Handler handler) {
