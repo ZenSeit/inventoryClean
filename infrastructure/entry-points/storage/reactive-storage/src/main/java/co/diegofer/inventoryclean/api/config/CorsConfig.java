@@ -14,12 +14,11 @@ import java.util.List;
 public class CorsConfig {
 
     @Bean
-    CorsWebFilter corsWebFilter(@Value("${cors.allowedOriginPatterns}") String origins) {
+    CorsWebFilter corsWebFilter(@Value("${cors.allowed-origins}") String origins) {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        //config.setAllowedOrigins(List.of("*"));
-        config.addAllowedOriginPattern("*");
-        config.setAllowedMethods(Arrays.asList("POST", "GET")); // TODO: Check others required methods
+        config.setAllowedOrigins(List.of("*")); // Permitir solicitudes desde cualquier origen
+        config.setAllowedMethods(Arrays.asList("POST", "GET")); // TODO: Asegúrate de incluir otros métodos que necesitas permitir
         config.setAllowedHeaders(List.of(CorsConfiguration.ALL));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
