@@ -1,6 +1,7 @@
 package co.diegofer.inventoryclean.r2dbc;
 
 import co.diegofer.inventoryclean.model.commands.RegisterFinalCustomerSaleCommand.ProductSale;
+import co.diegofer.inventoryclean.model.commands.custom.ProductToAdd;
 import co.diegofer.inventoryclean.model.product.Product;
 import co.diegofer.inventoryclean.model.product.gateways.ProductRepository;
 import co.diegofer.inventoryclean.r2dbc.data.ProductData;
@@ -53,13 +54,24 @@ public class ProductRepositoryAdapter implements ProductRepository {
     }
 
     @Override
-    public Mono<Product> addStock(String productId, Integer quantity) {
-        return productRepository.findById(productId)
-                .switchIfEmpty(Mono.error(new IllegalArgumentException("Product with id: " + productId + " was not found")))
-                .flatMap(product -> {
-                    product.setInventoryStock(product.getInventoryStock()+quantity);
-                    return productRepository.save(product);
-                }).map(product -> mapper.map(product, Product.class));
+    public Mono<List<ProductToAdd>> addStock(List<ProductToAdd> productsToAdd) {
+
+        List<ProductToAdd> productsAddedList = new ArrayList<>();
+
+        for(ProductToAdd productRequested: productsToAdd) {
+            productRepository.findById(productRequested.getProductId())
+                    .switchIfEmpty(Mono.error(new IllegalArgumentException("Product with id: " + productRequested.getProductId() + " was not found")))
+                    .flatMap(product -> {
+                        product.setInventoryStock(product.getInventoryStock()+productRequested.getQuantity());
+                        productsAddedList.add(productRequested);
+                        return productRepository.save(product);
+                    }).map(product -> mapper.map(product, Product.class)).subscribe();
+
+        }
+
+        return Mono.just(productsAddedList);
+
+
 
     }
 

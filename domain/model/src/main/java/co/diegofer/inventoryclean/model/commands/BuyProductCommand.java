@@ -1,26 +1,26 @@
 package co.diegofer.inventoryclean.model.commands;
 
+import co.diegofer.inventoryclean.model.commands.custom.ProductToAdd;
 import co.diegofer.inventoryclean.model.generic.Command;
+
+import java.util.List;
 
 public class BuyProductCommand extends Command {
 
-    private String productId;
+    //private String productId;
     private String branchId;
-    private Integer quantityToAdd;
+    //private Integer quantityToAdd;
+    List<ProductToAdd> products;
 
     public BuyProductCommand() {
     }
 
 
-    public String getProductId() {
-        return productId;
+    public List<ProductToAdd> getProducts() {
+        return products;
     }
-
     public String getBranchId() {
         return branchId;
     }
 
-    public Integer getQuantityToAdd() {
-        return quantityToAdd;
-    }
 }

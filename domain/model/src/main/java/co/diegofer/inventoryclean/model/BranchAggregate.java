@@ -1,6 +1,7 @@
 package co.diegofer.inventoryclean.model;
 
 import co.diegofer.inventoryclean.model.commands.RegisterFinalCustomerSaleCommand.ProductSale;
+import co.diegofer.inventoryclean.model.commands.custom.ProductToAdd;
 import co.diegofer.inventoryclean.model.events.*;
 import co.diegofer.inventoryclean.model.generic.AggregateRoot;
 import co.diegofer.inventoryclean.model.generic.DomainEvent;
@@ -53,8 +54,8 @@ public class BranchAggregate extends AggregateRoot<BranchId> {
         appendChange(new ResellerCustomerSaleRegistered(products, total.value())).apply();
     }
 
-    public void addStockToProduct(ProductId productId, InventoryStock inventoryStock){
-        appendChange(new StockAdded(productId.value(), inventoryStock.value())).apply();
+    public void addStockToProduct(List<ProductToAdd> products){
+        appendChange(new StockAdded(products)).apply();
     }
 
     public int calculateTotal(List<ProductSale> products){

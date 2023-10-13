@@ -11,6 +11,7 @@ import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +22,7 @@ import java.util.logging.Logger;
 
 @Component
 @ServerEndpoint("/retrieve/{correlationId}")
+@CrossOrigin(origins = "*")
 public class SocketController {
 
     private static final Logger logger = Logger.getLogger(SocketController.class.getName());

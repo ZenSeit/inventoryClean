@@ -50,7 +50,7 @@ public class MySQLUpdater extends DomainUpdater {
         });
 
         listen((StockAdded event) -> {
-            productRepository.addStock(event.getProductId(), event.getQuantityToAdd()).subscribe();
+            productRepository.addStock(event.getProducts()).subscribe();
         });
 
         listen((FinalCustomerSaleRegistered event) -> {

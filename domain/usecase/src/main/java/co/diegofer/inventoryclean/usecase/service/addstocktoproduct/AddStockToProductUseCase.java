@@ -16,14 +16,12 @@ import reactor.core.publisher.Mono;
 
 public class AddStockToProductUseCase extends UserCaseForCommand<BuyProductCommand> {
 
-    private final ProductRepository productRepository;
 
     private final DomainEventRepository repository;
 
     private final EventBus eventBus;
 
-    public AddStockToProductUseCase(ProductRepository productRepository, DomainEventRepository repository, EventBus eventBus) {
-        this.productRepository = productRepository;
+    public AddStockToProductUseCase(DomainEventRepository repository, EventBus eventBus) {
         this.repository = repository;
         this.eventBus = eventBus;
     }
@@ -37,8 +35,7 @@ public class AddStockToProductUseCase extends UserCaseForCommand<BuyProductComma
                                 events ->{
                                     BranchAggregate branch = BranchAggregate.from(BranchId.of(command.getBranchId()), events);
                                     branch.addStockToProduct(
-                                            ProductId.of(command.getProductId()),
-                                            new InventoryStock(command.getQuantityToAdd())
+                                            command.getProducts()
                                     );
 
                                     return Flux.fromIterable(branch.getUncommittedChanges());

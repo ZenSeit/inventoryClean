@@ -30,47 +30,61 @@ services:
     networks:
       - mynetwork
 
-  service-app:
-    image: zenseit/app-service
-    container_name: service
-    ports:
-      - '8080:8080'
-    depends_on:
-      - mysql
-    restart: on-failure
-    networks:
-      - mynetwork
+#  service-app:
+#    image: zenseit/app-service
+#    container_name: service
+#    ports:
+#      - '8080:8080'
+#    depends_on:
+#      - mysql
+#      - mongodb
+#    restart: on-failure
+#    networks:
+#      - mynetwork
+#
+#  storage-app:
+#    image: zenseit/app-storage
+#    container_name: storage
+#    ports:
+#      - '8081:8081'
+#    depends_on:
+#      - mysql
+#      - rabbitmq
+#    restart: on-failure
+#    networks:
+#      - mynetwork
+#
+#  socket-app:
+#    image: zenseit/app-socket
+#    container_name: socket
+#    ports:
+#      - '8082:8082'
+#    depends_on:
+#      - mysql
+#      - rabbitmq
+#    restart: on-failure
+#    networks:
+#      - mynetwork
+#
+#  auth-app:
+#    image: zenseit/app-auth
+#    container_name: auth
+#    ports:
+#      - '8083:8083'
+#    depends_on:
+#      - mysql
+#    restart: on-failure
+#    networks:
+#      - mynetwork
 
-  storage-app:
-    image: zenseit/app-storage
-    container_name: storage
-    ports:
-      - '8081:8081'
-    depends_on:
-      - mysql
-    restart: on-failure
-    networks:
-      - mynetwork
-
-  socket-app:
-    image: zenseit/app-socket
-    container_name: socket
-    ports:
-      - '8082:8082'
-    depends_on:
-      - mysql
-    restart: on-failure
-    networks:
-      - mynetwork
-
-  front-app:
-    image: zenseit/inventory-front:1.8
-    container_name: front
-    ports:
-      - '4200:4200'
-    restart: on-failure
-    networks:
-      - mynetwork
+#  front-app:
+#    image: zenseit/inventory-front
+#    container_name: front
+#    ports:
+#      - '4200:4200'
+#    restart: on-failure
+#    networks:
+#      - mynetwork
 
 
 networks:

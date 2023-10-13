@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .addFilterBefore(corsWebFilter("*"), SecurityWebFiltersOrder.CORS)
                 .authorizeExchange(exchanges ->
                         exchanges
-                                .pathMatchers("/api/v1/**")
+                                .pathMatchers("/api/v1/pro")
                                 .permitAll()
                                 .anyExchange()
                                 .authenticated())
