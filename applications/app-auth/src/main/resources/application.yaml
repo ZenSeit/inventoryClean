@@ -30,6 +30,6 @@ management:
       probes:
         enabled: true
 cors:
-  allowedOriginPatterns: "*"
+  allowed-origins: "http://localhost:4200,http://localhost:8080,http://inventory-front:4200"
 
 

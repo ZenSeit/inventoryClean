@@ -75,7 +75,14 @@ public class UserRepositoryAdapter implements UserRepository {
     }
 
     private AuthResponse getAuthResponse(UserDetails userDetails) {
+
         var extraClaims = extractAuthorities("roles", userDetails);
+
+        String branchId = "";
+        if (userDetails instanceof UserData) {
+            branchId = ((UserData) userDetails).getBranchId();
+        }
+        extraClaims.put("branchId", branchId);
 
         var jwtToken = jwtService.generateToken(userDetails, extraClaims);
         return AuthResponse.builder()
