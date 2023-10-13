@@ -12,15 +12,15 @@ public class User {
 
     private String id;
     private String name;
-    private String lastName;
+    private String lastname;
     private String email;
     private String password;
     private String role;
     private String branchId;
 
-    public User(String name, String lastName, String email, String password, String role, String branchId) {
+    public User(String name, String lastname, String email, String password, String role, String branchId) {
         this.name = name;
-        this.lastName = lastName;
+        this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.role = role;

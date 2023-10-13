@@ -24,7 +24,7 @@ public class UserData implements UserDetails {
     @Id
     private String id;
     private String name;
-    private String lastName;
+    private String lastname;
     private String email;
     private String password;
     private String role;

@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class UserRepositoryAdapter implements UserRepository {
         UserData userData = mapper.map(user, UserData.class);
         //userData.setId(newId);
         System.out.println(userData.getId());
-        return userRepositoryR2dbc.saveUser(userData.getId(),userData.getName(),userData.getLastName(),
+        return userRepositoryR2dbc.saveUser(userData.getId(),userData.getName(),userData.getLastname(),
                 passwordEncoder.encode(userData.getPassword()),userData.getEmail(),
                 userData.getRole(),userData.getBranchId()).thenReturn(
                 mapper.map(userData, User.class)
@@ -55,7 +56,7 @@ public class UserRepositoryAdapter implements UserRepository {
         user.setId(UUID.randomUUID().toString());
         UserData userData = mapper.map(user, UserData.class);
 
-        return userRepositoryR2dbc.saveUser(userData.getId(),userData.getName(),userData.getLastName(),
+        return userRepositoryR2dbc.saveUser(userData.getId(),userData.getName(),userData.getLastname(),
                 passwordEncoder.encode(userData.getPassword()),userData.getEmail(),
                 userData.getRole(),null).thenReturn(
                 mapper.map(userData, User.class)
@@ -72,6 +73,11 @@ public class UserRepositoryAdapter implements UserRepository {
                     var userDetails = (UserDetails) auth.getPrincipal();
                     return getAuthResponse(userDetails);
                 });
+    }
+
+    @Override
+    public Flux<User> getUsersByBranch(String branchId) {
+        return userRepositoryR2dbc.findByBranchId(branchId).map(user -> mapper.map(user, User.class));
     }
 
     private AuthResponse getAuthResponse(UserDetails userDetails) {

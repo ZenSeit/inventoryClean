@@ -3,12 +3,14 @@ package co.diegofer.inventoryclean.api;
 import co.diegofer.inventoryclean.model.branch.Branch;
 import co.diegofer.inventoryclean.model.invoice.InvoiceData;
 import co.diegofer.inventoryclean.model.product.Product;
+import co.diegofer.inventoryclean.model.user.User;
 import co.diegofer.inventoryclean.usecase.storage.getallbranches.GetAllBranchesUseCase;
 import co.diegofer.inventoryclean.usecase.storage.getallproducts.GetAllProductsUseCase;
 import co.diegofer.inventoryclean.usecase.storage.getbranchbyid.GetBranchByIdUseCase;
 import co.diegofer.inventoryclean.usecase.storage.getinvoicesbybranchid.GetInvoicesByBranchIdUseCase;
 import co.diegofer.inventoryclean.usecase.storage.getproductsbybranchid.GetProductsByBranchIdUseCase;
 import co.diegofer.inventoryclean.usecase.service.reducestockproduct.ReduceStockProductUseCase;
+import co.diegofer.inventoryclean.usecase.storage.getusersbybranch.GetUsersByBranchUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -77,6 +79,17 @@ public class RouterRest {
                 request -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(BodyInserters.fromPublisher(getInvoicesByBranchIdUseCase.apply(request.pathVariable("branch_id")), InvoiceData.class))
+                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(throwable.getMessage()))
+        );
+
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> getUserByBranch(GetUsersByBranchUseCase getUsersByBranchUseCase) {
+        return route(GET("/api/v1/users/{branch_id}"),
+                request -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(getUsersByBranchUseCase.apply(request.pathVariable("branch_id")), User.class))
                         .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(throwable.getMessage()))
         );
 

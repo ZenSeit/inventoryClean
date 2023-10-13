@@ -5,6 +5,7 @@ import co.diegofer.inventoryclean.r2dbc.data.UserData;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface UserRepositoryR2dbc extends ReactiveCrudRepository<UserData, String> {
@@ -20,4 +21,7 @@ public interface UserRepositoryR2dbc extends ReactiveCrudRepository<UserData, St
 
     @Query("SELECT * FROM User WHERE email = :email")
     Mono<UserData> findByEmail(@Param("email") String email);
+
+    @Query("SELECT * FROM User WHERE branch_id = :branchId")
+    Flux<UserData> findByBranchId(@Param("branchId") String branchId);
 }
