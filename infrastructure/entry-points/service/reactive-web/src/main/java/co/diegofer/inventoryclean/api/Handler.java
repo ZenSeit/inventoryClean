@@ -36,7 +36,6 @@ public class Handler {
 
     private final RegisterSuperUseCase registerSuperUseCase;
 
-    private final LoginUserUseCase loginUserUseCase;
 
 
     public Mono<ServerResponse> listenPOSTRegisterBranchUseCase(ServerRequest serverRequest) {

@@ -1,4 +1,4 @@
-package co.diegofer.inventoryclean.usecase.registerbranch;
+package co.diegofer.inventoryclean.usecase.service.registerbranch;
 
 import co.diegofer.inventoryclean.model.branch.Branch;
 import co.diegofer.inventoryclean.model.branch.gateways.BranchRepository;
@@ -24,9 +24,6 @@ import static org.mockito.Mockito.when;
 class RegisterBranchUseCaseTest {
 
     @Mock
-    private BranchRepository branchRepository;
-
-    @Mock
     private DomainEventRepository repository;
 
     @Mock
@@ -50,8 +47,6 @@ class RegisterBranchUseCaseTest {
         Branch savedBranch = new Branch("Branch name", "Location, country");
         savedBranch.setId("root");
 
-        /*when(branchRepository.saveABranch(Mockito.any())).thenReturn(
-                Mono.just(savedBranch));*/
 
         when(repository.saveEvent(Mockito.any())).thenReturn(Mono.just(new BranchCreated()));
 

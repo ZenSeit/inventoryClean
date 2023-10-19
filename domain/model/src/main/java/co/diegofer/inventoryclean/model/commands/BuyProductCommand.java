@@ -23,4 +23,11 @@ public class BuyProductCommand extends Command {
         return branchId;
     }
 
+    public void setBranchId(String branchId) {
+        this.branchId = branchId;
+    }
+
+    public void setProducts(List<ProductToAdd> products) {
+        this.products = products;
+    }
 }
