@@ -41,9 +41,9 @@ public class BranchRepositoryAdapter implements BranchRepository {
     @Override
     public Mono<Branch> findBranchById(String branchId) {
         return branchRepository.findById(branchId)
-                .switchIfEmpty(Mono.empty())
-                .map(branch -> mapper.map(branch, Branch.class))
-                .onErrorResume(e -> Mono.error(new IllegalArgumentException("Branch not found")));
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("Branch not found")))
+                .map(branch -> mapper.map(branch, Branch.class));
+                //.onErrorResume(e -> Mono.error(new IllegalArgumentException("Branch not found")));
     }
 
 }

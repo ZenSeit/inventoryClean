@@ -5,6 +5,9 @@ public class ProductToAdd {
     String productId;
     private Integer quantity;
 
+    public ProductToAdd() {
+    }
+
     public ProductToAdd(String productId, Integer quantity) {
         this.productId = productId;
         this.quantity = quantity;
@@ -17,4 +20,5 @@ public class ProductToAdd {
     public Integer getQuantity() {
         return quantity;
     }
+
 }

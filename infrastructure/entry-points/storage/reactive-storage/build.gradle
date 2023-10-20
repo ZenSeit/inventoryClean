@@ -6,4 +6,5 @@ dependencies {
     implementation 'io.micrometer:micrometer-registry-prometheus'
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: '3.0.4'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webflux-ui', version: '2.0.4'
 }

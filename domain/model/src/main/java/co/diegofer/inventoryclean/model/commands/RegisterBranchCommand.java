@@ -6,6 +6,7 @@ import co.diegofer.inventoryclean.model.generic.Command;
 public class RegisterBranchCommand extends Command {
 
     private String name;
+
     private LocationCommand location;
 
     public RegisterBranchCommand() {

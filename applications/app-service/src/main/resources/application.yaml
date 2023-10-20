@@ -32,4 +32,8 @@ management:
 cors:
   allowedOriginPatterns: "*"
 
+springdoc:
+  swagger-ui:
+    path: /api/v1/inventory/swagger-ui.html
+
 

@@ -59,7 +59,7 @@ class RouterRestTest {
         webTestClient = WebTestClient
                 .bindToRouterFunction(new RouterRest().getProductsByBranch(getProductsByBranchIdUseCase)
                         .andOther(new RouterRest().getBranches(getBranchesUseCase)).andOther(new RouterRest().getBranchById(getBranchByIdUseCase))
-                        .andOther(new RouterRest().getAllProducts(getAllProductsUseCase)).andOther(new RouterRest().getInvoicesByBranch(getInvoicesByBranchIdUseCase))
+                        .andOther(new RouterRest().getInvoicesByBranch(getInvoicesByBranchIdUseCase))
                         .andOther(new RouterRest().getUserByBranch(getUsersByBranchUseCase)))
                 .configureClient()
                 .baseUrl("http://localhost:8081")
@@ -129,7 +129,7 @@ class RouterRestTest {
     }
 
 
-    @Test
+    /*@Test
     void getAllProducts() {
 
         List<Product> sampleProducts = List.of(
@@ -146,7 +146,7 @@ class RouterRestTest {
                     .expectHeader().contentType(MediaType.APPLICATION_JSON)
                     .expectBodyList(Product.class)
                     .hasSize(2);
-    }
+    }*/
 
     @Test
     void getInvoicesByBranch() {

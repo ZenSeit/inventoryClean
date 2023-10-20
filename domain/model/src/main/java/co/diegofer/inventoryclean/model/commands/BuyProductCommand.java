@@ -1,5 +1,6 @@
 package co.diegofer.inventoryclean.model.commands;
 
+
 import co.diegofer.inventoryclean.model.commands.custom.ProductToAdd;
 import co.diegofer.inventoryclean.model.generic.Command;
 
@@ -7,14 +8,16 @@ import java.util.List;
 
 public class BuyProductCommand extends Command {
 
-    //private String productId;
     private String branchId;
-    //private Integer quantityToAdd;
     List<ProductToAdd> products;
 
     public BuyProductCommand() {
     }
 
+    public BuyProductCommand(String branchId, List<ProductToAdd> products) {
+        this.branchId = branchId;
+        this.products = products;
+    }
 
     public List<ProductToAdd> getProducts() {
         return products;

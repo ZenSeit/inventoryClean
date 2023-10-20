@@ -31,3 +31,7 @@ management:
         enabled: true
 cors:
   allowed-origins: "http://localhost:4200,http://localhost:8080,http://inventory-front:4200"
+
+springdoc:
+  swagger-ui:
+    path: /api/v1/inventory/swagger-ui.html

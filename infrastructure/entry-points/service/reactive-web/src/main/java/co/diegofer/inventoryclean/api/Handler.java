@@ -126,16 +126,12 @@ public class Handler {
 
     public Mono<ServerResponse> listenPATCHAddStock(ServerRequest serverRequest) {
 
-
         return addStockToProductUseCase.apply(serverRequest.bodyToMono(BuyProductCommand.class))
-                .flatMap(domainEvent -> {
-                    return ServerResponse.ok()
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .body(BodyInserters.fromValue(domainEvent));
-                }).next()
-                .onErrorResume(Exception.class, e -> {
-                    return ServerResponse.badRequest().bodyValue(e.getMessage());
-                });
+                .flatMap(domainEvent -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromValue(domainEvent))).next()
+                .onErrorResume(Exception.class, e -> ServerResponse.badRequest().bodyValue(e.getMessage()));
+
     }
 
     public Mono<ServerResponse> listenGETOtherUseCase(ServerRequest serverRequest) {
